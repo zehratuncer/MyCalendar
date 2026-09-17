@@ -191,14 +191,40 @@ export const calculateGradePoints = (midterm, final, midtermWeight = 40) => {
   return { rawScore: Math.round(rawScore * 10) / 10, letterGrade, gpa };
 };
 
+// Check if an assignment belongs to a course (smart matching by ID, code, or name)
+export const isAssignmentForCourse = (assignment, course) => {
+  if (!assignment || !course) return false;
+
+  // 1. Direct ID Match
+  if (assignment.courseId && (String(assignment.courseId) === String(course.id) || String(assignment.courseId) === String(course.code))) {
+    return true;
+  }
+
+  // 2. Course Code Match (e.g. CENG201)
+  if (course.code && assignment.courseName) {
+    const cleanCode = String(course.code).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    const cleanAssignCourse = String(assignment.courseName).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    if (cleanCode && cleanAssignCourse.includes(cleanCode)) {
+      return true;
+    }
+  }
+
+  // 3. Name Match with case-insensitive & Turkish locale support
+  if (assignment.courseName && course.name) {
+    const normAssign = String(assignment.courseName).trim().toLocaleLowerCase('tr-TR');
+    const normCourse = String(course.name).trim().toLocaleLowerCase('tr-TR');
+    if (normAssign === normCourse || normAssign.includes(normCourse) || normCourse.includes(normAssign)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 // Convert 4.00 GPA to 100-scale (YÖK ve Üniversite Dönüşüm Formülü)
 export const convertGpaTo100 = (gpa) => {
   const numGpa = Number(gpa) || 0;
   if (numGpa <= 0) return 0;
-  // YÖK standart formül yaklaşımı: (GPA * 25) veya eğriye göre ~84.6
-  // Örneğin 3.15 için: 80.17, 3.19 için: 81.1, 4.00 için: 100
-  // Hassas lineer eğri: 100 = 4.0, 50 = 2.0 -> Base formula: 25 * gpa
-  // Kullanıcının transkriptindeki 84.6 yüzlük not değeri için dinamik hesap
   const converted = (numGpa * 23.5) + 9.5;
   return Math.min(100, Math.max(0, Math.round(converted * 10) / 10));
 };

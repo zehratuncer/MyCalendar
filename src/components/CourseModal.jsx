@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Trash2, BookOpen, Plus, Clock, Flame, Zap, Leaf, Check } from 'lucide-react';
-import { DAYS_TR, getDueDateStatus } from '../utils/dateUtils';
+import { DAYS_TR, getDueDateStatus, isAssignmentForCourse } from '../utils/dateUtils';
 
 const COLOR_OPTIONS = [
   '#6366f1', // Indigo
@@ -68,13 +68,9 @@ export default function CourseModal({
     onClose();
   };
 
-  // Filter assignments for this specific course
+  // Filter assignments for this specific course using robust matching
   const courseAssignments = editingCourse
-    ? assignments.filter(
-        (a) =>
-          a.courseId === editingCourse.id ||
-          (a.courseName && a.courseName.toLowerCase() === editingCourse.name.toLowerCase())
-      )
+    ? assignments.filter((a) => isAssignmentForCourse(a, editingCourse))
     : [];
 
   const getPriorityBadge = (priority) => {

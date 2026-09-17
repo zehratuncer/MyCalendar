@@ -16,7 +16,7 @@ import {
   Zap,
   Leaf
 } from 'lucide-react';
-import { DAYS_TR, getCurrentDayName, getDueDateStatus } from '../utils/dateUtils';
+import { DAYS_TR, getCurrentDayName, getDueDateStatus, isAssignmentForCourse } from '../utils/dateUtils';
 import CourseModal from './CourseModal';
 import AssignmentModal from './AssignmentModal';
 
@@ -55,11 +55,7 @@ export const ScheduleView = ({
 
   // Assignments belonging to the selected course
   const selectedCourseAssignments = selectedCourse
-    ? assignments.filter(
-        (a) =>
-          a.courseId === selectedCourse.id ||
-          (a.courseName && a.courseName.toLowerCase() === selectedCourse.name.toLowerCase())
-      )
+    ? assignments.filter((a) => isAssignmentForCourse(a, selectedCourse))
     : [];
 
   // Course Handlers
@@ -262,11 +258,7 @@ export const ScheduleView = ({
                         <td key={day} className={day === currentDay ? 'today-col' : ''}>
                           {slotCourses.map((course) => {
                             const isSelected = selectedCourse?.id === course.id;
-                            const courseAssigns = assignments.filter(
-                              (a) =>
-                                a.courseId === course.id ||
-                                (a.courseName && a.courseName.toLowerCase() === course.name.toLowerCase())
-                            );
+                            const courseAssigns = assignments.filter((a) => isAssignmentForCourse(a, course));
 
                             return (
                               <div
@@ -337,11 +329,7 @@ export const ScheduleView = ({
             <div className="daily-timeline-list">
               {filteredDayCourses.map((course) => {
                 const isSelected = selectedCourse?.id === course.id;
-                const courseAssigns = assignments.filter(
-                  (a) =>
-                    a.courseId === course.id ||
-                    (a.courseName && a.courseName.toLowerCase() === course.name.toLowerCase())
-                );
+                const courseAssigns = assignments.filter((a) => isAssignmentForCourse(a, course));
 
                 return (
                   <div
