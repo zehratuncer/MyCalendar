@@ -104,11 +104,11 @@ export default function App() {
 
         {activeTab === 'gpa' && (
           <GpaCalculatorView
-            grades={data.grades}
-            setGrades={(newGrades) =>
+            semesters={data.semesters}
+            setSemesters={(newSemesters) =>
               setData((prev) => ({
                 ...prev,
-                grades: typeof newGrades === 'function' ? newGrades(prev.grades) : newGrades
+                semesters: typeof newSemesters === 'function' ? newSemesters(prev.semesters) : newSemesters
               }))
             }
             courses={data.courses}
