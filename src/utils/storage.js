@@ -1,9 +1,10 @@
-import { INITIAL_COURSES, INITIAL_ASSIGNMENTS, INITIAL_NOTES, INITIAL_EXAMS, INITIAL_GRADES } from './mockData';
+import { INITIAL_COURSES, INITIAL_ASSIGNMENTS, INITIAL_NOTES, INITIAL_EXAMS, INITIAL_GRADES, INITIAL_TODOS } from './mockData';
 
 const KEYS = {
   COURSES: 'mycal_courses_v1',
   ASSIGNMENTS: 'mycal_assignments_v1',
   NOTES: 'mycal_notes_v1',
+  TODOS: 'mycal_todos_v1',
   EXAMS: 'mycal_exams_v1',
   GRADES: 'mycal_grades_v1',
   THEME: 'mycal_theme_v1',
@@ -34,6 +35,7 @@ export const loadAppData = () => {
     courses: getStoredItem(KEYS.COURSES, INITIAL_COURSES),
     assignments: getStoredItem(KEYS.ASSIGNMENTS, INITIAL_ASSIGNMENTS),
     notes: getStoredItem(KEYS.NOTES, INITIAL_NOTES),
+    todos: getStoredItem(KEYS.TODOS, INITIAL_TODOS),
     exams: getStoredItem(KEYS.EXAMS, INITIAL_EXAMS),
     grades: getStoredItem(KEYS.GRADES, INITIAL_GRADES),
     scratchpad: getStoredItem(KEYS.SCRATCHPAD, '📌 Burası anlık hızlı karalama defteriniz. Aklınıza gelen şeyleri hemen yazın, otomatik kaydedilir!'),
@@ -51,6 +53,7 @@ export const saveAppData = (data) => {
   if (data.courses) setStoredItem(KEYS.COURSES, data.courses);
   if (data.assignments) setStoredItem(KEYS.ASSIGNMENTS, data.assignments);
   if (data.notes) setStoredItem(KEYS.NOTES, data.notes);
+  if (data.todos) setStoredItem(KEYS.TODOS, data.todos);
   if (data.exams) setStoredItem(KEYS.EXAMS, data.exams);
   if (data.grades) setStoredItem(KEYS.GRADES, data.grades);
   if (data.scratchpad !== undefined) setStoredItem(KEYS.SCRATCHPAD, data.scratchpad);

@@ -27,7 +27,7 @@ export default function Navbar({
   const navItems = [
     { id: 'schedule', label: 'Ders Programı', icon: Calendar },
     { id: 'assignments', label: 'Ödevler & Görevler', icon: BookOpen },
-    { id: 'notes', label: 'Hızlı Notlar', icon: Sparkles },
+    { id: 'notes', label: 'Yapılacaklar & Notlar', icon: Sparkles },
     { id: 'gpa', label: 'Not Hesapla (GPA)', icon: Sparkles },
     { id: 'exams', label: 'Sınav Takvimi', icon: Calendar }
   ];

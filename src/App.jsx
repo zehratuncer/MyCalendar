@@ -89,8 +89,16 @@ export default function App() {
                 notes: typeof newNotes === 'function' ? newNotes(prev.notes) : newNotes
               }))
             }
+            todos={data.todos}
+            setTodos={(newTodos) =>
+              setData((prev) => ({
+                ...prev,
+                todos: typeof newTodos === 'function' ? newTodos(prev.todos) : newTodos
+              }))
+            }
             scratchpad={data.scratchpad}
             setScratchpad={(newScratchpad) => setData((prev) => ({ ...prev, scratchpad: newScratchpad }))}
+            courses={data.courses}
           />
         )}
 

@@ -206,6 +206,87 @@ export const INITIAL_EXAMS = [
   }
 ];
 
+export const INITIAL_TODOS = [
+  {
+    id: 'todo-1',
+    title: 'Veri Yapıları 3. slayt özetini çıkar',
+    description: 'Ağaçlar ve ikili arama ağacı bölümünü tekrar et.',
+    timeframe: 'today', // 'today', 'this_week', 'this_month', 'someday'
+    dueDate: new Date().toISOString().split('T')[0],
+    dueTime: '18:00',
+    priority: 'high', // 'high', 'medium', 'low'
+    courseId: 'course-1',
+    courseName: 'Veri Yapıları ve Algoritmalar',
+    completed: false,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'todo-2',
+    title: 'Lineer Cebir ödev sorularını çöz',
+    description: 'Bölüm sonu çift numaralı sorular.',
+    timeframe: 'today',
+    dueDate: new Date().toISOString().split('T')[0],
+    dueTime: '21:00',
+    priority: 'medium',
+    courseId: 'course-2',
+    courseName: 'Lineer Cebir',
+    completed: true,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'todo-3',
+    title: 'Web Tasarım projesi için React bileşenlerini tasarla',
+    description: 'Header, ders programı gridi ve modal pencereler.',
+    timeframe: 'this_week',
+    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    dueTime: '23:59',
+    priority: 'high',
+    courseId: 'course-3',
+    courseName: 'Web Programlama & Tasarım',
+    completed: false,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'todo-4',
+    title: 'Kütüphaneden İstatistik soru bankası al',
+    description: 'Vize öncesi pratik yapmak için.',
+    timeframe: 'this_week',
+    dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    dueTime: '15:30',
+    priority: 'low',
+    courseId: 'course-5',
+    courseName: 'Olasılık ve İstatistik',
+    completed: false,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'todo-5',
+    title: 'Yapay Zeka vize konularını tamamla ve kod pratiği yap',
+    description: 'A* ve Minimax algoritmalarının Python implementasyonları.',
+    timeframe: 'this_month',
+    dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    dueTime: '20:00',
+    priority: 'high',
+    courseId: 'course-4',
+    courseName: 'Yapay Zekaya Giriş',
+    completed: false,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: 'todo-6',
+    title: 'Zorunlu staj başvuru evraklarını bölüm sekreterliğine ver',
+    description: 'İmzalı staj kabul formu ve transkript.',
+    timeframe: 'this_month',
+    dueDate: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    dueTime: '16:00',
+    priority: 'medium',
+    courseId: '',
+    courseName: '',
+    completed: false,
+    createdAt: new Date().toISOString()
+  }
+];
+
 export const INITIAL_GRADES = [
   { id: 'grade-1', courseName: 'Veri Yapıları', code: 'CENG201', credits: 4, midterm: 82, final: 88, letterGrade: 'AA', gpa: 4.0 },
   { id: 'grade-2', courseName: 'Lineer Cebir', code: 'MATH104', credits: 3, midterm: 70, final: 75, letterGrade: 'BB', gpa: 3.0 },
