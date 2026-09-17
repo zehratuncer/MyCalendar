@@ -6,20 +6,14 @@ import AssignmentsView from './components/AssignmentsView';
 import NotesView from './components/NotesView';
 import GpaCalculatorView from './components/GpaCalculatorView';
 import ExamsView from './components/ExamsView';
-import BackupModal from './components/BackupModal';
-import AuthModal from './components/AuthModal';
 
 import { loadAppData, saveAppData } from './utils/storage';
-import { checkUpcomingDeadlines } from './utils/notificationUtils';
-import { supabase, isSupabaseConfigured } from './utils/supabaseClient';
+import { checkUpcomingDeadlines, checkUpcomingExams } from './utils/notificationUtils';
 import './App.css';
 
 export default function App() {
   const [data, setData] = useState(() => loadAppData());
   const [activeTab, setActiveTab] = useState('schedule'); // 'schedule', 'assignments', 'notes', 'gpa', 'exams'
-  const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
 
   // Sync theme to document root
   useEffect(() => {
@@ -31,37 +25,21 @@ export default function App() {
     saveAppData(data);
   }, [data]);
 
-  // Listen to Supabase Auth state if configured
+  // Check upcoming assignments and exams for browser notifications
   useEffect(() => {
-    if (supabase && isSupabaseConfigured) {
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        setCurrentUser(session?.user ?? null);
-      });
-
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-        setCurrentUser(session?.user ?? null);
-      });
-
-      return () => subscription.unsubscribe();
-    }
-  }, []);
-
-  // Check upcoming assignments for notification triggers periodically
-  useEffect(() => {
-    checkUpcomingDeadlines(data.assignments);
-    const interval = setInterval(() => {
+    const runNotificationChecks = () => {
       checkUpcomingDeadlines(data.assignments);
-    }, 60 * 60 * 1000); // Every hour
+      checkUpcomingExams(data.exams);
+    };
+
+    runNotificationChecks();
+    const interval = setInterval(runNotificationChecks, 30 * 60 * 1000); // Check every 30 minutes
     return () => clearInterval(interval);
-  }, [data.assignments]);
+  }, [data.assignments, data.exams]);
 
   const toggleTheme = () => {
     const nextTheme = data.theme === 'dark' ? 'light' : 'dark';
     setData((prev) => ({ ...prev, theme: nextTheme }));
-  };
-
-  const handleDataReloaded = (newData) => {
-    setData(newData);
   };
 
   return (
@@ -73,9 +51,6 @@ export default function App() {
         theme={data.theme}
         toggleTheme={toggleTheme}
         courses={data.courses}
-        onOpenBackupModal={() => setIsBackupModalOpen(true)}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        user={currentUser}
       />
 
       {/* Main Content Area */}
@@ -83,14 +58,24 @@ export default function App() {
         {activeTab === 'schedule' && (
           <ScheduleView
             courses={data.courses}
-            setCourses={(newCourses) => setData((prev) => ({ ...prev, courses: typeof newCourses === 'function' ? newCourses(prev.courses) : newCourses }))}
+            setCourses={(newCourses) =>
+              setData((prev) => ({
+                ...prev,
+                courses: typeof newCourses === 'function' ? newCourses(prev.courses) : newCourses
+              }))
+            }
           />
         )}
 
         {activeTab === 'assignments' && (
           <AssignmentsView
             assignments={data.assignments}
-            setAssignments={(newAssignments) => setData((prev) => ({ ...prev, assignments: typeof newAssignments === 'function' ? newAssignments(prev.assignments) : newAssignments }))}
+            setAssignments={(newAssignments) =>
+              setData((prev) => ({
+                ...prev,
+                assignments: typeof newAssignments === 'function' ? newAssignments(prev.assignments) : newAssignments
+              }))
+            }
             courses={data.courses}
           />
         )}
@@ -98,7 +83,12 @@ export default function App() {
         {activeTab === 'notes' && (
           <NotesView
             notes={data.notes}
-            setNotes={(newNotes) => setData((prev) => ({ ...prev, notes: typeof newNotes === 'function' ? newNotes(prev.notes) : newNotes }))}
+            setNotes={(newNotes) =>
+              setData((prev) => ({
+                ...prev,
+                notes: typeof newNotes === 'function' ? newNotes(prev.notes) : newNotes
+              }))
+            }
             scratchpad={data.scratchpad}
             setScratchpad={(newScratchpad) => setData((prev) => ({ ...prev, scratchpad: newScratchpad }))}
           />
@@ -107,7 +97,12 @@ export default function App() {
         {activeTab === 'gpa' && (
           <GpaCalculatorView
             grades={data.grades}
-            setGrades={(newGrades) => setData((prev) => ({ ...prev, grades: typeof newGrades === 'function' ? newGrades(prev.grades) : newGrades }))}
+            setGrades={(newGrades) =>
+              setData((prev) => ({
+                ...prev,
+                grades: typeof newGrades === 'function' ? newGrades(prev.grades) : newGrades
+              }))
+            }
             courses={data.courses}
           />
         )}
@@ -115,7 +110,12 @@ export default function App() {
         {activeTab === 'exams' && (
           <ExamsView
             exams={data.exams}
-            setExams={(newExams) => setData((prev) => ({ ...prev, exams: typeof newExams === 'function' ? newExams(prev.exams) : newExams }))}
+            setExams={(newExams) =>
+              setData((prev) => ({
+                ...prev,
+                exams: typeof newExams === 'function' ? newExams(prev.exams) : newExams
+              }))
+            }
             courses={data.courses}
           />
         )}
@@ -123,22 +123,6 @@ export default function App() {
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      {/* Multi-Device Backup & Sync Modal */}
-      <BackupModal
-        isOpen={isBackupModalOpen}
-        onClose={() => setIsBackupModalOpen(false)}
-        appData={data}
-        onDataReloaded={handleDataReloaded}
-      />
-
-      {/* Supabase Auth / Cloud Modal */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        user={currentUser}
-        onAuthSuccess={(user) => setCurrentUser(user)}
-      />
     </div>
   );
 }
