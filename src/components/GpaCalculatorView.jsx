@@ -32,68 +32,6 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
   // Midterm weight percentage for table inline calculations (Default 40%)
   const [midtermWeight, setMidtermWeight] = useState(40);
 
-  // =========================================================================
-  // MULTI-COMPONENT TARGET SOLVER (Vize + Ödev 1 + Ödev 2 + Quiz + Final)
-  // =========================================================================
-  const [targetEvaluations, setTargetEvaluations] = useState([
-    { id: 'eval-1', name: 'Vize Sınavı', weight: 30, score: 70 },
-    { id: 'eval-2', name: 'Ödev 1 (Proje)', weight: 10, score: 85 },
-    { id: 'eval-3', name: 'Ödev 2 (Uygulama)', weight: 10, score: 90 }
-  ]);
-  const [targetGoalGrade, setTargetGoalGrade] = useState('A-');
-
-  const handleAddEvaluation = () => {
-    const nextNum = targetEvaluations.length + 1;
-    setTargetEvaluations([
-      ...targetEvaluations,
-      {
-        id: `eval-${Date.now()}`,
-        name: `Ödev ${nextNum} veya Quiz`,
-        weight: 10,
-        score: 80
-      }
-    ]);
-  };
-
-  const handleUpdateEvaluation = (id, field, value) => {
-    setTargetEvaluations(
-      targetEvaluations.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
-      )
-    );
-  };
-
-  const handleDeleteEvaluation = (id) => {
-    if (targetEvaluations.length <= 1) {
-      return alert('En az bir değerlendirme kalmalıdır.');
-    }
-    setTargetEvaluations(targetEvaluations.filter((item) => item.id !== id));
-  };
-
-  // Calculations for Target Solver
-  const totalInSemesterWeight = targetEvaluations.reduce(
-    (acc, curr) => acc + (Number(curr.weight) || 0),
-    0
-  );
-  const remainingFinalWeight = Math.max(0, 100 - totalInSemesterWeight);
-
-  const accumulatedPoints = targetEvaluations.reduce((acc, curr) => {
-    const w = Number(curr.weight) || 0;
-    const s = Number(curr.score) || 0;
-    return acc + (s * w) / 100;
-  }, 0);
-
-  const targetInfo = GRADE_SCALE[targetGoalGrade] || { minScore: 70 };
-  const targetScoreNeeded = targetInfo.minScore || 70;
-
-  // Formula: (TargetScore - AccumulatedPoints) / (RemainingFinalWeight / 100)
-  const requiredFinalScore =
-    remainingFinalWeight > 0
-      ? Math.ceil(
-          (targetScoreNeeded - accumulatedPoints) / (remainingFinalWeight / 100)
-        )
-      : Math.ceil(targetScoreNeeded - accumulatedPoints);
-
   // ==========================================
   // CALCULATIONS (YANO, GANO, ECTS, POINTS)
   // ==========================================
@@ -350,8 +288,8 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
             </div>
             <div style={{ fontSize: '1.1rem', fontWeight: 800 }}>
               {Number(totalOverallStats.gano) >= 3.50 ? '🌟 Yüksek Onur' :
-               Number(totalOverallStats.gano) >= 3.00 ? '🎯 Onur Öğrencisi' :
-               Number(totalOverallStats.gano) >= 2.00 ? '✅ Başarılı' : '⚠️ Sınırda / Şartlı'}
+                Number(totalOverallStats.gano) >= 3.00 ? '🎯 Onur Öğrencisi' :
+                  Number(totalOverallStats.gano) >= 2.00 ? '✅ Başarılı' : '⚠️ Sınırda / Şartlı'}
             </div>
           </div>
         </div>
@@ -561,10 +499,10 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
                             color: ['A', 'A-', 'B+', 'B'].includes(course.letterGrade)
                               ? '#10b981'
                               : ['B-', 'C+', 'C'].includes(course.letterGrade)
-                              ? '#3b82f6'
-                              : course.letterGrade === 'IP' || course.letterGrade === 'S'
-                              ? '#8b5cf6'
-                              : '#ef4444'
+                                ? '#3b82f6'
+                                : course.letterGrade === 'IP' || course.letterGrade === 'S'
+                                  ? '#8b5cf6'
+                                  : '#ef4444'
                           }}
                         >
                           {GRADE_KEYS.map((gk) => (
@@ -663,169 +601,6 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
           </div>
         </div>
       )}
-
-      {/* ========================================================================= */}
-      {/* 3. "FİNALDEN KAÇ ALMALIYIM?" & ÇOKLU ÖDEV/VİZE HESAPLAYICI                 */}
-      {/* ========================================================================= */}
-      <div className="glass-panel" style={{ padding: '24px', marginTop: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Target size={22} />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>🎯 "Finalden En Az Kaç Almalıyım?" Hesaplayıcı</h3>
-              <p style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>
-                Vize, Ödev 1, Ödev 2, Proje veya Quiz notlarınızı ve ağırlıklarını girerek istediğiniz harf notu için gereken final puanını hesaplayın.
-              </p>
-            </div>
-          </div>
-
-          <button onClick={handleAddEvaluation} className="btn-secondary" style={{ fontSize: '0.85rem' }}>
-            <Plus size={15} />
-            <span>+ Değerlendirme / Ödev Ekle</span>
-          </button>
-        </div>
-
-        {/* Dynamic Evaluation Items List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-          {targetEvaluations.map((item, idx) => (
-            <div key={item.id} className="eval-item-row">
-              <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '3px', display: 'block' }}>
-                  Değerlendirme Adı #{idx + 1}
-                </label>
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={(e) => handleUpdateEvaluation(item.id, 'name', e.target.value)}
-                  className="form-input table-input"
-                  placeholder="Örn: Vize, Ödev 1, Quiz..."
-                  style={{ width: '100%', fontWeight: 600 }}
-                />
-              </div>
-
-              <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '3px', display: 'block' }}>
-                  Ağırlık (%)
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type="number"
-                    min="1"
-                    max="100"
-                    value={item.weight}
-                    onChange={(e) => handleUpdateEvaluation(item.id, 'weight', Number(e.target.value))}
-                    className="form-input table-input"
-                    style={{ width: '100%', textAlign: 'center', fontWeight: 700 }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '3px', display: 'block' }}>
-                  Aldığınız Not (0-100)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={item.score}
-                  onChange={(e) => handleUpdateEvaluation(item.id, 'score', Number(e.target.value))}
-                  className="form-input table-input"
-                  style={{ width: '100%', textAlign: 'center', fontWeight: 700 }}
-                />
-              </div>
-
-              <div>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteEvaluation(item.id)}
-                  style={{ color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', padding: '6px', marginTop: '16px' }}
-                  title="Sil"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Weights Summary Bar */}
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '22px' }}>
-          <div className="eval-summary-pill">
-            <span style={{ color: 'var(--text-muted)' }}>Dönem İçi Toplam Ağırlık:</span>
-            <strong style={{ color: totalInSemesterWeight > 100 ? '#ef4444' : 'var(--text-primary)' }}>
-              %{totalInSemesterWeight}
-            </strong>
-          </div>
-
-          <div className="eval-summary-pill">
-            <span style={{ color: 'var(--text-muted)' }}>Kalan Final Ağırlığı:</span>
-            <strong style={{ color: 'var(--primary)' }}>%{remainingFinalWeight}</strong>
-          </div>
-
-          <div className="eval-summary-pill">
-            <span style={{ color: 'var(--text-muted)' }}>Şu Ana Kadar Toplanan Puan:</span>
-            <strong style={{ color: 'var(--accent-emerald)', fontFamily: 'var(--font-mono)' }}>
-              {accumulatedPoints.toFixed(1)} Puan
-            </strong>
-          </div>
-        </div>
-
-        {/* Target Goal & Result */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '18px', alignItems: 'center' }}>
-          <div>
-            <label className="form-label" style={{ fontWeight: 700 }}>Hedeflediğiniz Harf Notu:</label>
-            <select
-              value={targetGoalGrade}
-              onChange={(e) => setTargetGoalGrade(e.target.value)}
-              className="form-select"
-              style={{ fontSize: '1rem', fontWeight: 700 }}
-            >
-              <option value="A">A (90+ Puan / 4.00 Katsayı)</option>
-              <option value="A-">A- (85+ Puan / 3.70 Katsayı)</option>
-              <option value="B+">B+ (80+ Puan / 3.30 Katsayı)</option>
-              <option value="B">B (75+ Puan / 3.00 Katsayı)</option>
-              <option value="B-">B- (70+ Puan / 2.70 Katsayı)</option>
-              <option value="C+">C+ (65+ Puan / 2.30 Katsayı)</option>
-              <option value="C">C (60+ Puan / 2.00 Katsayı)</option>
-              <option value="C-">C- (55+ Puan / 1.70 Katsayı)</option>
-              <option value="D+">D+ (50+ Puan / 1.30 Katsayı)</option>
-              <option value="D">D (45+ Puan / 1.00 Katsayı - Geçme)</option>
-            </select>
-          </div>
-
-          <div style={{ background: 'var(--bg-subtle)', padding: '18px 24px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-              Gereken Minimum Final Sınavı Notu:
-            </div>
-            <div
-              style={{
-                fontSize: '2rem',
-                fontWeight: 800,
-                color:
-                  requiredFinalScore > 100
-                    ? '#ef4444'
-                    : requiredFinalScore <= 0
-                    ? 'var(--accent-emerald)'
-                    : 'var(--primary)',
-                fontFamily: 'var(--font-mono)',
-                lineHeight: 1.1
-              }}
-            >
-              {requiredFinalScore > 100
-                ? `${requiredFinalScore} (100'ü aşıyor)`
-                : requiredFinalScore <= 0
-                ? '0 (Zaten garantilediniz 🎉)'
-                : `${requiredFinalScore} Puan`}
-            </div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-              Hedeflenen {targetScoreNeeded} puan için finalden %{remainingFinalWeight} ağırlıkla alınması gereken not.
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
