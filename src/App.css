@@ -357,6 +357,24 @@
   gap: 6px;
 }
 
+.course-card-compact.selected-course-card {
+  outline: 3px solid #ffffff;
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.6), var(--shadow-md);
+  transform: scale(1.03);
+  z-index: 5;
+}
+
+.course-assignment-count-pill {
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  display: inline-block;
+  font-weight: 600;
+}
+
 /* Daily Timeline List */
 .daily-timeline-list {
   display: flex;
@@ -373,11 +391,17 @@
   background: var(--bg-card);
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm);
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .timeline-item-card:hover {
   transform: translateX(4px);
+}
+
+.timeline-item-card.selected-course-card {
+  border: 2px solid var(--primary);
+  border-left-width: 6px;
+  box-shadow: 0 0 20px var(--primary-glow);
 }
 
 .timeline-time-box {
@@ -392,6 +416,83 @@
   font-weight: 700;
   font-size: 0.9rem;
   color: var(--text-primary);
+}
+
+/* Selected Course Detail Panel & Assignments */
+.course-detail-panel {
+  border-top: 3px solid var(--primary);
+  animation: fadeIn 0.3s ease;
+}
+
+.course-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.course-info-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.meta-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.empty-course-assignments-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+  gap: 6px;
+}
+
+.course-assignments-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .course-assignments-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  }
+}
+
+.course-assign-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.course-assign-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.course-assign-card.completed {
+  opacity: 0.6;
+  background: var(--bg-subtle);
 }
 
 /* ==========================================================================
