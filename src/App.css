@@ -1119,8 +1119,17 @@
 }
 
 .table-input {
-  padding: 6px 10px;
+  padding: 6px 8px;
   font-size: 0.88rem;
+  min-width: 54px;
+  border-radius: var(--radius-sm);
+  -moz-appearance: textfield;
+}
+
+.table-input::-webkit-outer-spin-button,
+.table-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .grades-table-container {
@@ -1134,13 +1143,14 @@
 .grades-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 750px;
+  min-width: 800px;
 }
 
 .grades-table th, .grades-table td {
-  padding: 10px 14px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border-subtle);
   text-align: left;
+  vertical-align: middle;
 }
 
 .grades-table th {
@@ -1150,6 +1160,35 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* Target Evaluation Items Simulator */
+.eval-item-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr auto;
+  gap: 10px;
+  align-items: center;
+  background: var(--bg-subtle);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: border-color 0.2s;
+}
+
+.eval-item-row:hover {
+  border-color: var(--primary);
+}
+
+.eval-summary-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Transcript Cumulative Cards */
