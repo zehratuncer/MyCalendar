@@ -64,13 +64,6 @@ export default function App() {
                 courses: typeof newCourses === 'function' ? newCourses(prev.courses) : newCourses
               }))
             }
-            assignments={data.assignments}
-            setAssignments={(newAssignments) =>
-              setData((prev) => ({
-                ...prev,
-                assignments: typeof newAssignments === 'function' ? newAssignments(prev.assignments) : newAssignments
-              }))
-            }
           />
         )}
 

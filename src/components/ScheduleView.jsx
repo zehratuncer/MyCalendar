@@ -12,7 +12,6 @@ import {
   Check,
   Edit2,
   AlertCircle,
-  ExternalLink,
   Flame,
   Zap,
   Leaf
@@ -110,13 +109,14 @@ export const ScheduleView = ({
     setIsCourseModalOpen(true);
   };
 
-  const openEditCourseModal = (course, e) => {
-    if (e) e.stopPropagation();
+  const handleCourseClick = (course) => {
+    setSelectedCourseId(course.id);
     setEditingCourse(course);
     setIsCourseModalOpen(true);
   };
 
   const openAddAssignmentForCourse = (course) => {
+    setIsCourseModalOpen(false);
     setEditingAssignment({
       id: '',
       title: '',
@@ -133,6 +133,7 @@ export const ScheduleView = ({
   };
 
   const openEditAssignmentModal = (assignment) => {
+    setIsCourseModalOpen(false);
     setEditingAssignment(assignment);
     setIsAssignmentModalOpen(true);
   };
@@ -261,12 +262,16 @@ export const ScheduleView = ({
                         <td key={day} className={day === currentDay ? 'today-col' : ''}>
                           {slotCourses.map((course) => {
                             const isSelected = selectedCourse?.id === course.id;
-                            const courseAssigns = assignments.filter((a) => a.courseId === course.id);
+                            const courseAssigns = assignments.filter(
+                              (a) =>
+                                a.courseId === course.id ||
+                                (a.courseName && a.courseName.toLowerCase() === course.name.toLowerCase())
+                            );
 
                             return (
                               <div
                                 key={course.id}
-                                onClick={() => setSelectedCourseId(course.id)}
+                                onClick={() => handleCourseClick(course)}
                                 className={`course-card-compact ${isSelected ? 'selected-course-card' : ''}`}
                                 style={{
                                   backgroundColor: course.color || '#6366f1',
@@ -332,12 +337,16 @@ export const ScheduleView = ({
             <div className="daily-timeline-list">
               {filteredDayCourses.map((course) => {
                 const isSelected = selectedCourse?.id === course.id;
-                const courseAssigns = assignments.filter((a) => a.courseId === course.id);
+                const courseAssigns = assignments.filter(
+                  (a) =>
+                    a.courseId === course.id ||
+                    (a.courseName && a.courseName.toLowerCase() === course.name.toLowerCase())
+                );
 
                 return (
                   <div
                     key={course.id}
-                    onClick={() => setSelectedCourseId(course.id)}
+                    onClick={() => handleCourseClick(course)}
                     className={`timeline-item-card ${isSelected ? 'selected-course-card' : ''}`}
                     style={{ borderLeftColor: course.color || '#6366f1', cursor: 'pointer' }}
                   >
@@ -414,7 +423,7 @@ export const ScheduleView = ({
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button
                 type="button"
-                onClick={(e) => openEditCourseModal(selectedCourse, e)}
+                onClick={() => handleCourseClick(selectedCourse)}
                 className="btn-secondary"
                 style={{ fontSize: '0.82rem', padding: '6px 12px' }}
               >
@@ -560,6 +569,9 @@ export const ScheduleView = ({
         onSave={handleSaveCourse}
         onDelete={handleDeleteCourse}
         editingCourse={editingCourse}
+        assignments={assignments}
+        onOpenAssignmentModal={openEditAssignmentModal}
+        onAddAssignmentForCourse={openAddAssignmentForCourse}
       />
 
       {/* Assignment Modal */}
