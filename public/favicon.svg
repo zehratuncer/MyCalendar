@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="url(#grad)" />
+  <!-- Calendar Icon Graphic -->
+  <rect x="112" y="144" width="288" height="256" rx="32" fill="#ffffff" />
+  <path d="M112 216h288" stroke="#6366f1" stroke-width="24" stroke-linecap="round" />
+  <rect x="176" y="96" width="32" height="80" rx="16" fill="#ffffff" />
+  <rect x="304" y="96" width="32" height="80" rx="16" fill="#ffffff" />
+  <circle cx="184" cy="288" r="18" fill="#6366f1" />
+  <circle cx="256" cy="288" r="18" fill="#6366f1" />
+  <circle cx="328" cy="288" r="18" fill="#ec4899" />
+  <circle cx="184" cy="344" r="18" fill="#6366f1" />
+  <circle cx="256" cy="344" r="18" fill="#10b981" />
+  <circle cx="328" cy="344" r="18" fill="#6366f1" />
+</svg>
