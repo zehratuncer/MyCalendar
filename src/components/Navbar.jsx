@@ -1,24 +1,26 @@
-import React from 'react';
-import { Calendar, Sun, Moon, Bell, Download, Upload, Sparkles, BookOpen, Cloud, User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Sun, Moon, Bell, BookOpen, Sparkles } from 'lucide-react';
 import { formatTurkishDate, getTodayScheduleStatus } from '../utils/dateUtils';
-import { requestNotificationPermission } from '../utils/notificationUtils';
+import { requestNotificationPermission, getNotificationPermissionState } from '../utils/notificationUtils';
 
 export default function Navbar({
   activeTab,
   setActiveTab,
   theme,
   toggleTheme,
-  courses,
-  onOpenBackupModal,
-  onOpenAuthModal,
-  user
+  courses
 }) {
+  const [notificationStatus, setNotificationStatus] = useState('default');
   const scheduleStatus = getTodayScheduleStatus(courses);
+
+  useEffect(() => {
+    setNotificationStatus(getNotificationPermissionState());
+  }, []);
 
   const handleNotificationClick = async () => {
     const granted = await requestNotificationPermission();
     if (granted) {
-      alert('🔔 Bildirimler başarıyla etkinleştirildi! Yaklaşan ödev ve sınavlar için hatırlatma alacaksınız.');
+      setNotificationStatus('granted');
     }
   };
 
@@ -50,7 +52,7 @@ export default function Navbar({
           <span>{scheduleStatus.message}</span>
         </div>
 
-        {/* Desktop Tabs */}
+        {/* Desktop Navigation Tabs */}
         <nav className="desktop-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -68,38 +70,37 @@ export default function Navbar({
           })}
         </nav>
 
-        {/* Actions (Cloud Auth, Backup, Notifications, Theme toggle) */}
+        {/* Header Actions (Cleaned up: Notifications & Theme toggle) */}
         <div className="header-actions">
-          {/* Supabase Cloud Sync / User Button */}
-          <button
-            onClick={onOpenAuthModal}
-            className="btn-icon"
-            style={{
-              borderColor: user ? 'var(--accent-emerald)' : 'var(--border-subtle)',
-              color: user ? 'var(--accent-emerald)' : 'var(--text-secondary)'
-            }}
-            title={user ? `Giriş Yapıldı (${user.email}) - Bulut Aktif` : "Bulut Girişi / Senkronizasyon (Supabase)"}
-            aria-label="Bulut Hesabı"
-          >
-            {user ? <User size={18} /> : <Cloud size={18} />}
-          </button>
-
           <button
             onClick={handleNotificationClick}
             className="btn-icon"
-            title="Bildirimleri Aç / Ayarla"
+            style={{
+              position: 'relative',
+              color: notificationStatus === 'granted' ? 'var(--accent-emerald)' : 'var(--text-secondary)'
+            }}
+            title={
+              notificationStatus === 'granted'
+                ? '🔔 Bildirimler Aktif (Test etmek veya durumu görmek için tıklayın)'
+                : '🔔 Bildirimleri Etkinleştir (Yaklaşan ödev ve sınavlar için)'
+            }
             aria-label="Bildirimler"
           >
             <Bell size={18} />
-          </button>
-
-          <button
-            onClick={onOpenBackupModal}
-            className="btn-icon"
-            title="Cihazlar Arası Eşitleme & Yedekleme (Laptop / Telefon / Tablet)"
-            aria-label="Yedekleme ve Cihaz Eşitleme"
-          >
-            <Upload size={18} />
+            {notificationStatus === 'granted' && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  width: '7px',
+                  height: '7px',
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  boxShadow: '0 0 6px #10b981'
+                }}
+              />
+            )}
           </button>
 
           <button
