@@ -32,7 +32,7 @@ export const AssignmentsView = ({ assignments, setAssignments, courses }) => {
   };
 
   const handleSave = (item) => {
-    if (editingAssignment) {
+    if (editingAssignment && editingAssignment.id) {
       setAssignments(assignments.map((a) => (a.id === item.id ? item : a)));
     } else {
       setAssignments([item, ...assignments]);

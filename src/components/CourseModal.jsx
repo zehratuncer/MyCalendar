@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2 } from 'lucide-react';
-import { DAYS_TR } from '../utils/dateUtils';
+import { X, Save, Trash2, BookOpen, Plus, Clock, Flame, Zap, Leaf, Check } from 'lucide-react';
+import { DAYS_TR, getDueDateStatus, isAssignmentForCourse } from '../utils/dateUtils';
 
 const COLOR_OPTIONS = [
   '#6366f1', // Indigo
@@ -14,7 +14,16 @@ const COLOR_OPTIONS = [
   '#14b8a6'  // Teal
 ];
 
-export default function CourseModal({ isOpen, onClose, onSave, onDelete, editingCourse }) {
+export default function CourseModal({
+  isOpen,
+  onClose,
+  onSave,
+  onDelete,
+  editingCourse,
+  assignments = [],
+  onOpenAssignmentModal,
+  onAddAssignmentForCourse
+}) {
   const [formData, setFormData] = useState({
     name: '',
     code: '',
@@ -59,9 +68,38 @@ export default function CourseModal({ isOpen, onClose, onSave, onDelete, editing
     onClose();
   };
 
+  // Filter assignments for this specific course using robust matching
+  const courseAssignments = editingCourse
+    ? assignments.filter((a) => isAssignmentForCourse(a, editingCourse))
+    : [];
+
+  const getPriorityBadge = (priority) => {
+    switch (priority) {
+      case 'high':
+        return (
+          <span className="badge badge-danger" style={{ fontSize: '0.72rem' }}>
+            <Flame size={11} /> Yüksek
+          </span>
+        );
+      case 'low':
+        return (
+          <span className="badge badge-success" style={{ fontSize: '0.72rem' }}>
+            <Leaf size={11} /> Düşük
+          </span>
+        );
+      case 'medium':
+      default:
+        return (
+          <span className="badge badge-warning" style={{ fontSize: '0.72rem' }}>
+            <Zap size={11} /> Orta
+          </span>
+        );
+    }
+  };
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
         {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
@@ -73,7 +111,7 @@ export default function CourseModal({ isOpen, onClose, onSave, onDelete, editing
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} style={{ padding: '24px' }}>
+        <form onSubmit={handleSubmit} style={{ padding: '24px', maxHeight: '80vh', overflowY: 'auto' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div className="form-group" style={{ gridColumn: 'span 2' }}>
               <label className="form-label">Ders Adı *</label>
@@ -200,8 +238,108 @@ export default function CourseModal({ isOpen, onClose, onSave, onDelete, editing
             </div>
           </div>
 
+          {/* ========================================================================= */}
+          {/* ASSIGNMENTS SECTION INSIDE COURSE MODAL (DERSE BAĞLI ÖDEVLER)             */}
+          {/* ========================================================================= */}
+          {editingCourse && (
+            <div
+              style={{
+                marginTop: '20px',
+                paddingTop: '20px',
+                borderTop: '1px solid var(--border-subtle)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <BookOpen size={18} color="var(--primary)" />
+                  <span>Bu Derse Ait Ödevler</span>
+                  <span className="pill-count" style={{ background: 'var(--bg-subtle)' }}>
+                    {courseAssignments.length}
+                  </span>
+                </h3>
+
+                {onAddAssignmentForCourse && (
+                  <button
+                    type="button"
+                    onClick={() => onAddAssignmentForCourse(editingCourse)}
+                    className="btn-secondary"
+                    style={{ fontSize: '0.8rem', padding: '4px 10px' }}
+                  >
+                    <Plus size={13} />
+                    <span>Ödev Ekle</span>
+                  </button>
+                )}
+              </div>
+
+              {courseAssignments.length === 0 ? (
+                <div
+                  style={{
+                    padding: '16px',
+                    background: 'var(--bg-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    textAlign: 'center',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
+                  Bu ders için kayıtlı bir ödev bulunmuyor.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {courseAssignments.map((assign) => {
+                    const dueStatus = getDueDateStatus(assign.dueDate, assign.dueTime);
+                    return (
+                      <div
+                        key={assign.id}
+                        onClick={() => onOpenAssignmentModal && onOpenAssignmentModal(assign)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '10px 14px',
+                          background: 'var(--bg-input)',
+                          border: '1px solid var(--border-subtle)',
+                          borderRadius: 'var(--radius-md)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                        className="modal-assign-item"
+                      >
+                        <div>
+                          <div
+                            style={{
+                              fontSize: '0.92rem',
+                              fontWeight: 600,
+                              textDecoration: assign.completed ? 'line-through' : 'none',
+                              color: assign.completed ? 'var(--text-muted)' : 'var(--text-primary)'
+                            }}
+                          >
+                            {assign.title}
+                          </div>
+                          {assign.description && (
+                            <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                              {assign.description.substring(0, 50)}...
+                            </div>
+                          )}
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                          <span className={`badge ${dueStatus.badgeClass}`} style={{ fontSize: '0.7rem' }}>
+                            <Clock size={10} />
+                            <span>{dueStatus.label}</span>
+                          </span>
+                          {getPriorityBadge(assign.priority)}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Footer Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '24px' }}>
             {editingCourse && (
               <button
                 type="button"

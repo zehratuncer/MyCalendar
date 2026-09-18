@@ -6,6 +6,7 @@ import AssignmentsView from './components/AssignmentsView';
 import NotesView from './components/NotesView';
 import GpaCalculatorView from './components/GpaCalculatorView';
 import ExamsView from './components/ExamsView';
+import StudentWidget from './components/StudentWidget';
 
 import { loadAppData, saveAppData } from './utils/storage';
 import { checkUpcomingDeadlines, checkUpcomingExams } from './utils/notificationUtils';
@@ -55,6 +56,12 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
+        {/* PWA Mobile & Tablet Live Assistant Widget */}
+        <StudentWidget
+          courses={data.courses}
+          assignments={data.assignments}
+          onNavigate={(tab) => setActiveTab(tab)}
+        />
         {activeTab === 'schedule' && (
           <ScheduleView
             courses={data.courses}
@@ -62,6 +69,13 @@ export default function App() {
               setData((prev) => ({
                 ...prev,
                 courses: typeof newCourses === 'function' ? newCourses(prev.courses) : newCourses
+              }))
+            }
+            assignments={data.assignments}
+            setAssignments={(newAssignments) =>
+              setData((prev) => ({
+                ...prev,
+                assignments: typeof newAssignments === 'function' ? newAssignments(prev.assignments) : newAssignments
               }))
             }
           />
@@ -89,18 +103,26 @@ export default function App() {
                 notes: typeof newNotes === 'function' ? newNotes(prev.notes) : newNotes
               }))
             }
+            todos={data.todos}
+            setTodos={(newTodos) =>
+              setData((prev) => ({
+                ...prev,
+                todos: typeof newTodos === 'function' ? newTodos(prev.todos) : newTodos
+              }))
+            }
             scratchpad={data.scratchpad}
             setScratchpad={(newScratchpad) => setData((prev) => ({ ...prev, scratchpad: newScratchpad }))}
+            courses={data.courses}
           />
         )}
 
         {activeTab === 'gpa' && (
           <GpaCalculatorView
-            grades={data.grades}
-            setGrades={(newGrades) =>
+            semesters={data.semesters}
+            setSemesters={(newSemesters) =>
               setData((prev) => ({
                 ...prev,
-                grades: typeof newGrades === 'function' ? newGrades(prev.grades) : newGrades
+                semesters: typeof newSemesters === 'function' ? newSemesters(prev.semesters) : newSemesters
               }))
             }
             courses={data.courses}

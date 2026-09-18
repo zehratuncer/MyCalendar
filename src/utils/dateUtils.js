@@ -145,23 +145,143 @@ export const getTodayScheduleStatus = (courses = []) => {
   };
 };
 
+// University Letter Grade Scale (Mudanya Üniversitesi ve Standart Harf Notu Tablosu)
+export const GRADE_SCALE = {
+  'A': { gpa: 4.00, label: 'A (4.00)', minScore: 90, countsInGpa: true },
+  'A-': { gpa: 3.70, label: 'A- (3.70)', minScore: 85, countsInGpa: true },
+  'B+': { gpa: 3.30, label: 'B+ (3.30)', minScore: 80, countsInGpa: true },
+  'B': { gpa: 3.00, label: 'B (3.00)', minScore: 75, countsInGpa: true },
+  'B-': { gpa: 2.70, label: 'B- (2.70)', minScore: 70, countsInGpa: true },
+  'C+': { gpa: 2.30, label: 'C+ (2.30)', minScore: 65, countsInGpa: true },
+  'C': { gpa: 2.00, label: 'C (2.00)', minScore: 60, countsInGpa: true },
+  'C-': { gpa: 1.70, label: 'C- (1.70)', minScore: 55, countsInGpa: true },
+  'D+': { gpa: 1.30, label: 'D+ (1.30)', minScore: 50, countsInGpa: true },
+  'D': { gpa: 1.00, label: 'D (1.00)', minScore: 45, countsInGpa: true },
+  'F': { gpa: 0.00, label: 'F (0.00)', minScore: 0, countsInGpa: true },
+  'IP': { gpa: 0.00, label: 'IP (Devam Eden/Staj)', minScore: 0, countsInGpa: false },
+  'S': { gpa: 0.00, label: 'S (Başarılı/Kredisiz)', minScore: 0, countsInGpa: false },
+  'U': { gpa: 0.00, label: 'U (Başarısız)', minScore: 0, countsInGpa: false },
+  'EX': { gpa: 0.00, label: 'EX (Muaf)', minScore: 0, countsInGpa: false },
+  'W': { gpa: 0.00, label: 'W (Çekildi)', minScore: 0, countsInGpa: false },
+  'NA': { gpa: 0.00, label: 'NA (Devamsız)', minScore: 0, countsInGpa: true }
+};
+
+export const GRADE_KEYS = Object.keys(GRADE_SCALE);
+
 // Calculate letter grade & GPA from midterm and final
 export const calculateGradePoints = (midterm, final, midtermWeight = 40) => {
   const finalWeight = 100 - midtermWeight;
   const rawScore = (Number(midterm) * midtermWeight + Number(final) * finalWeight) / 100;
   
-  let letterGrade = 'FF';
+  let letterGrade = 'F';
   let gpa = 0.0;
 
-  if (rawScore >= 90) { letterGrade = 'AA'; gpa = 4.0; }
-  else if (rawScore >= 85) { letterGrade = 'BA'; gpa = 3.5; }
-  else if (rawScore >= 80) { letterGrade = 'BB'; gpa = 3.0; }
-  else if (rawScore >= 75) { letterGrade = 'CB'; gpa = 2.5; }
-  else if (rawScore >= 70) { letterGrade = 'CC'; gpa = 2.0; }
-  else if (rawScore >= 60) { letterGrade = 'DC'; gpa = 1.5; }
-  else if (rawScore >= 50) { letterGrade = 'DD'; gpa = 1.0; }
-  else if (rawScore >= 40) { letterGrade = 'FD'; gpa = 0.5; }
-  else { letterGrade = 'FF'; gpa = 0.0; }
+  if (rawScore >= 90) { letterGrade = 'A'; gpa = 4.0; }
+  else if (rawScore >= 85) { letterGrade = 'A-'; gpa = 3.7; }
+  else if (rawScore >= 80) { letterGrade = 'B+'; gpa = 3.3; }
+  else if (rawScore >= 75) { letterGrade = 'B'; gpa = 3.0; }
+  else if (rawScore >= 70) { letterGrade = 'B-'; gpa = 2.7; }
+  else if (rawScore >= 65) { letterGrade = 'C+'; gpa = 2.3; }
+  else if (rawScore >= 60) { letterGrade = 'C'; gpa = 2.0; }
+  else if (rawScore >= 55) { letterGrade = 'C-'; gpa = 1.7; }
+  else if (rawScore >= 50) { letterGrade = 'D+'; gpa = 1.3; }
+  else if (rawScore >= 45) { letterGrade = 'D'; gpa = 1.0; }
+  else { letterGrade = 'F'; gpa = 0.0; }
 
   return { rawScore: Math.round(rawScore * 10) / 10, letterGrade, gpa };
+};
+
+// Check if an assignment belongs to a course (smart matching by ID, code, or name)
+export const isAssignmentForCourse = (assignment, course) => {
+  if (!assignment || !course) return false;
+
+  // 1. Direct ID Match
+  if (assignment.courseId && (String(assignment.courseId) === String(course.id) || String(assignment.courseId) === String(course.code))) {
+    return true;
+  }
+
+  // 2. Course Code Match (e.g. CENG201)
+  if (course.code && assignment.courseName) {
+    const cleanCode = String(course.code).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    const cleanAssignCourse = String(assignment.courseName).replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    if (cleanCode && cleanAssignCourse.includes(cleanCode)) {
+      return true;
+    }
+  }
+
+  // 3. Name Match with case-insensitive & Turkish locale support
+  if (assignment.courseName && course.name) {
+    const normAssign = String(assignment.courseName).trim().toLocaleLowerCase('tr-TR');
+    const normCourse = String(course.name).trim().toLocaleLowerCase('tr-TR');
+    if (normAssign === normCourse || normAssign.includes(normCourse) || normCourse.includes(normAssign)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+// Convert 4.00 GPA to 100-scale (YÖK ve Üniversite Dönüşüm Formülü)
+export const convertGpaTo100 = (gpa) => {
+  const numGpa = Number(gpa) || 0;
+  if (numGpa <= 0) return 0;
+  const converted = (numGpa * 23.5) + 9.5;
+  return Math.min(100, Math.max(0, Math.round(converted * 10) / 10));
+};
+
+// Compute rich live status for mobile & tablet widgets
+export const getWidgetData = (courses = [], assignments = []) => {
+  const currentDay = getCurrentDayName();
+  const now = new Date();
+  const currentHours = String(now.getHours()).padStart(2, '0');
+  const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+  const currentTime = `${currentHours}:${currentMinutes}`;
+  
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const todayStr = `${year}-${month}-${day}`;
+
+  // Courses
+  const todayCourses = (courses || [])
+    .filter((c) => c.day === currentDay)
+    .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+  const activeCourse = todayCourses.find((c) =>
+    isTimeBetween(currentTime, c.startTime, c.endTime)
+  );
+
+  const nextCourse = todayCourses.find((c) => c.startTime > currentTime);
+
+  // Assignments
+  const pendingAssignments = (assignments || []).filter((a) => !a.completed);
+  
+  const todayAssignments = pendingAssignments
+    .filter((a) => a.dueDate === todayStr)
+    .sort((a, b) => (a.dueTime || '23:59').localeCompare(b.dueTime || '23:59'));
+
+  const upcomingAssignments = pendingAssignments
+    .filter((a) => a.dueDate > todayStr)
+    .sort((a, b) => {
+      const dateDiff = a.dueDate.localeCompare(b.dueDate);
+      if (dateDiff !== 0) return dateDiff;
+      return (a.dueTime || '23:59').localeCompare(b.dueTime || '23:59');
+    });
+
+  const overdueAssignments = pendingAssignments
+    .filter((a) => a.dueDate < todayStr)
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+
+  return {
+    currentDay,
+    currentTime,
+    todayStr,
+    todayCourses,
+    activeCourse,
+    nextCourse,
+    todayAssignments,
+    upcomingAssignments,
+    overdueAssignments,
+    pendingAssignments
+  };
 };
