@@ -215,12 +215,13 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                     {totalCount > 0 ? (
                       <div>
                         {/* Mini Progress bar */}
-                        <div className="exam-progress-bar-bg" style={{ height: '5px', marginBottom: '8px' }}>
+                        <div className="exam-progress-bar-bg" style={{ height: '6px', marginBottom: '8px' }}>
                           <div
                             className="exam-progress-bar-fill"
                             style={{
                               width: `${progressPercent}%`,
-                              background: progressPercent === 100 ? 'var(--accent-emerald)' : 'var(--primary)'
+                              background: 'linear-gradient(90deg, #10b981, #34d399)',
+                              boxShadow: progressPercent > 0 ? '0 0 8px rgba(16, 185, 129, 0.4)' : 'none'
                             }}
                           />
                         </div>

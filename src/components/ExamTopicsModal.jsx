@@ -151,13 +151,13 @@ export default function ExamTopicsModal({
         <div className="exam-progress-card">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
             <span style={{ fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <ListTodo size={16} color="var(--primary)" />
+              <ListTodo size={16} color="var(--accent-emerald)" />
               <span>Konu İlerlemesi:</span>
-              <span style={{ color: 'var(--primary)' }}>
+              <span style={{ color: 'var(--accent-emerald)', fontWeight: 800 }}>
                 {completedCount} / {totalCount} Konu Tamamlandı
               </span>
             </span>
-            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: progressPercent === 100 ? 'var(--accent-emerald)' : 'var(--text-secondary)' }}>
+            <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--accent-emerald)' }}>
               %{progressPercent}
             </span>
           </div>
@@ -167,7 +167,8 @@ export default function ExamTopicsModal({
               className="exam-progress-bar-fill"
               style={{
                 width: `${progressPercent}%`,
-                background: progressPercent === 100 ? 'var(--accent-emerald)' : 'linear-gradient(90deg, var(--primary), var(--secondary))'
+                background: 'linear-gradient(90deg, #10b981, #34d399)',
+                boxShadow: progressPercent > 0 ? '0 0 12px rgba(16, 185, 129, 0.5)' : 'none'
               }}
             />
           </div>
