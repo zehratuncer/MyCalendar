@@ -78,7 +78,7 @@ export const ScheduleView = ({
 
   // Assignment Handlers
   const handleSaveAssignment = (assignmentData) => {
-    if (editingAssignment) {
+    if (editingAssignment && editingAssignment.id) {
       setAssignments(
         assignments.map((a) => (a.id === assignmentData.id ? assignmentData : a))
       );

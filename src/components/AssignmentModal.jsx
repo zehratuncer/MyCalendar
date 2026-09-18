@@ -41,6 +41,8 @@ export default function AssignmentModal({
 
   if (!isOpen) return null;
 
+  const isEditing = Boolean(editingAssignment && editingAssignment.id);
+
   const handleCourseChange = (e) => {
     const courseId = e.target.value;
     const selectedCourse = courses.find((c) => c.id === courseId);
@@ -56,7 +58,7 @@ export default function AssignmentModal({
     if (!formData.title.trim()) return alert('Lütfen ödev başlığını giriniz.');
     onSave({
       ...formData,
-      id: editingAssignment ? editingAssignment.id : `assign-${Date.now()}`
+      id: isEditing ? editingAssignment.id : `assign-${Date.now()}`
     });
     onClose();
   };
@@ -67,7 +69,7 @@ export default function AssignmentModal({
         {/* Modal Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-            {editingAssignment ? 'Ödevi Düzenle' : 'Yeni Ödev & Görev Ekle'}
+            {isEditing ? 'Ödevi Düzenle' : 'Yeni Ödev & Görev Ekle'}
           </h2>
           <button onClick={onClose} className="btn-icon">
             <X size={18} />
@@ -168,7 +170,7 @@ export default function AssignmentModal({
 
           {/* Footer Actions */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '20px' }}>
-            {editingAssignment && (
+            {isEditing && (
               <button
                 type="button"
                 onClick={() => {
@@ -190,7 +192,7 @@ export default function AssignmentModal({
               </button>
               <button type="submit" className="btn-primary">
                 <Save size={16} />
-                <span>{editingAssignment ? 'Kaydet' : 'Ödevi Ekle'}</span>
+                <span>{isEditing ? 'Kaydet' : 'Ödevi Ekle'}</span>
               </button>
             </div>
           </div>
