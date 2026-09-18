@@ -1,42 +1,16 @@
 {
   "short_name": "MyCalendar",
-  "name": "MyCalendar - Üniversite & Ders Asistanı",
-  "description": "Öğrenciler için canlı ders programı, ödev ve sınav takip asistanı",
+  "name": "MyCalendar - Okul & Ders Planlayıcı",
   "icons": [
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
-      "sizes": "192x192 512x512",
-      "purpose": "any maskable"
+      "sizes": "192x192 512x512"
     }
   ],
   "start_url": "/",
-  "background_color": "#090d16",
+  "background_color": "#0f172a",
   "theme_color": "#6366f1",
   "display": "standalone",
-  "orientation": "portrait",
-  "categories": ["education", "productivity"],
-  "shortcuts": [
-    {
-      "name": "Ders Programı",
-      "short_name": "Dersler",
-      "description": "Bugünkü derslerinizi ve haftalık programı görüntüleyin",
-      "url": "/?tab=schedule",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    },
-    {
-      "name": "Ödevler & Görevler",
-      "short_name": "Ödevler",
-      "description": "Acil ve yaklaşan ödevleri kontrol edin",
-      "url": "/?tab=assignments",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    },
-    {
-      "name": "Sınav Takvimi",
-      "short_name": "Sınavlar",
-      "description": "Vize ve final geri sayımlarını görüntüleyin",
-      "url": "/?tab=exams",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    }
-  ]
+  "orientation": "portrait"
 }
