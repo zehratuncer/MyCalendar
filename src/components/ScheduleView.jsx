@@ -283,7 +283,8 @@ export const ScheduleView = ({
                                 )}
                                 {courseAssigns.length > 0 && (
                                   <div className="course-assignment-count-pill">
-                                    📝 {courseAssigns.length} Ödev
+                                    <BookOpen size={11} />
+                                    <span>{courseAssigns.length} Ödev</span>
                                   </div>
                                 )}
                               </div>
@@ -349,8 +350,9 @@ export const ScheduleView = ({
                         {course.code && <span className="badge badge-info">{course.code}</span>}
                         {course.credits && <span className="badge badge-warning">{course.credits} AKTS</span>}
                         {courseAssigns.length > 0 && (
-                          <span className="badge badge-success" style={{ marginLeft: 'auto' }}>
-                            📝 {courseAssigns.length} Ödev
+                          <span className="badge badge-success" style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}>
+                            <BookOpen size={12} />
+                            <span>{courseAssigns.length} Ödev</span>
                           </span>
                         )}
                       </div>

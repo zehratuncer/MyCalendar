@@ -358,6 +358,22 @@
   gap: 6px;
 }
 
+.course-card-compact .course-assignment-count-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  background: rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(4px);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: fit-content;
+}
+
 /* Daily Timeline List */
 .daily-timeline-list {
   display: flex;
