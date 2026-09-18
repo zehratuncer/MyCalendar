@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Sun, Moon, Bell, BookOpen, StickyNote, Calculator, Award } from 'lucide-react';
+import { Calendar, Sun, Moon, Bell, BookOpen, StickyNote, Calculator, Award, Cloud, Laptop, RefreshCw } from 'lucide-react';
 import { formatTurkishDate, getTodayScheduleStatus } from '../utils/dateUtils';
 import { requestNotificationPermission, getNotificationPermissionState } from '../utils/notificationUtils';
 
@@ -8,7 +8,10 @@ export default function Navbar({
   setActiveTab,
   theme,
   toggleTheme,
-  courses
+  courses,
+  onOpenAuth,
+  onOpenBackup,
+  syncState
 }) {
   const [notificationStatus, setNotificationStatus] = useState('default');
   const scheduleStatus = getTodayScheduleStatus(courses);
@@ -31,6 +34,8 @@ export default function Navbar({
     { id: 'gpa', label: 'Not Hesapla (GPA)', icon: Calculator },
     { id: 'exams', label: 'Sınav Takvimi', icon: Award }
   ];
+
+  const isSynced = syncState?.isAuthenticated;
 
   return (
     <header className="app-header">
@@ -70,8 +75,51 @@ export default function Navbar({
           })}
         </nav>
 
-        {/* Header Actions (Cleaned up: Notifications & Theme toggle) */}
+        {/* Header Actions */}
         <div className="header-actions">
+          {/* Cloud Sync Button */}
+          <button
+            onClick={onOpenAuth}
+            className="btn-icon"
+            style={{
+              position: 'relative',
+              color: isSynced ? 'var(--accent-emerald)' : 'var(--text-secondary)'
+            }}
+            title={
+              isSynced
+                ? `☁️ Bulut Senkronizasyon Aktif (${syncState?.user?.email})`
+                : '☁️ Bulut Senkronizasyon (Tüm Cihazlar Eşitle)'
+            }
+            aria-label="Bulut Senkronizasyon"
+          >
+            <Cloud size={18} />
+            {isSynced && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '8px',
+                  right: '8px',
+                  width: '7px',
+                  height: '7px',
+                  borderRadius: '50%',
+                  background: '#10b981',
+                  boxShadow: '0 0 6px #10b981'
+                }}
+              />
+            )}
+          </button>
+
+          {/* Multi-Device Backup / Transfer Button */}
+          <button
+            onClick={onOpenBackup}
+            className="btn-icon"
+            title="💻📱 Cihazlar Arası Yedek & JSON Aktarımı"
+            aria-label="Yedekleme ve Aktarım"
+          >
+            <Laptop size={18} />
+          </button>
+
+          {/* Notifications */}
           <button
             onClick={handleNotificationClick}
             className="btn-icon"
@@ -103,6 +151,7 @@ export default function Navbar({
             )}
           </button>
 
+          {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
             className="btn-icon"
