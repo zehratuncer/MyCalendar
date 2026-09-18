@@ -120,7 +120,7 @@ export const ExamsView = ({ exams, setExams, courses }) => {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '18px' }}>
+        <div className="exams-grid">
           {sortedExams.map((exam) => {
             const countdown = getExamCountdown(exam.date, exam.time);
             const topicList = exam.topicList || [];
@@ -128,40 +128,41 @@ export const ExamsView = ({ exams, setExams, courses }) => {
             const totalCount = topicList.length;
             const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+            const weightDisplay = exam.weight
+              ? exam.weight.startsWith('%')
+                ? exam.weight
+                : `%${exam.weight}`
+              : '';
+
             return (
               <div
                 key={exam.id}
                 onClick={() => setSelectedExamForTopics(exam)}
                 className="glass-panel exam-card-container"
                 style={{
-                  padding: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: '16px',
-                  cursor: 'pointer',
                   borderTop: `4px solid ${exam.type === 'Final' ? '#ef4444' : exam.type === 'Vize' ? '#6366f1' : '#f59e0b'}`
                 }}
               >
-                <div>
+                <div className="exam-card-body">
                   {/* Top Badges & Edit Button */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div className="exam-card-header">
+                    <div className="exam-card-badge-group">
                       <span
                         className="badge"
                         style={{
                           background: exam.type === 'Final' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.15)',
                           color: exam.type === 'Final' ? '#f87171' : '#818cf8',
-                          fontSize: '0.82rem'
+                          fontSize: '0.82rem',
+                          fontWeight: 700
                         }}
                       >
-                        {exam.type} {exam.weight ? `(${exam.weight})` : ''}
+                        {exam.type} {weightDisplay ? `(${weightDisplay})` : ''}
                       </span>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="exam-card-actions">
                       <div className="exam-countdown-box">
-                        <Timer size={14} />
+                        <Timer size={13} />
                         <span>{countdown.text}</span>
                       </div>
                       <button
@@ -171,8 +172,7 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                           setEditingExam(exam);
                           setIsModalOpen(true);
                         }}
-                        className="btn-icon"
-                        style={{ width: '30px', height: '30px' }}
+                        className="btn-icon exam-edit-btn"
                         title="Sınavı Düzenle"
                       >
                         <Edit2 size={14} />
@@ -181,19 +181,19 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                   </div>
 
                   {/* Course Title */}
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginTop: '6px' }}>
+                  <h3 className="exam-card-title">
                     {exam.courseName}
                   </h3>
 
                   {/* Exam Date & Room */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '10px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div className="exam-card-meta">
+                    <div className="exam-card-meta-item">
                       <Calendar size={14} color="var(--primary)" />
                       <span>{formatTurkishShortDate(exam.date)} • {exam.time} ({exam.durationMinutes} Dk)</span>
                     </div>
 
                     {exam.room && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <div className="exam-card-meta-item">
                         <MapPin size={14} color="var(--accent-emerald)" />
                         <span>{exam.room}</span>
                       </div>
@@ -202,12 +202,12 @@ export const ExamsView = ({ exams, setExams, courses }) => {
 
                   {/* Çıkacak Konular & İlerleme Kart Alanı */}
                   <div className="exam-topics-preview-box">
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <div className="exam-topics-preview-header">
+                      <span className="exam-topics-preview-label">
                         <ListTodo size={14} color="var(--primary)" />
                         <span>Çıkacak Konular:</span>
                       </span>
-                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: progressPercent === 100 && totalCount > 0 ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
+                      <span className="exam-topics-preview-status" style={{ color: progressPercent === 100 && totalCount > 0 ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
                         {totalCount > 0 ? `${completedCount}/${totalCount} Tamamlandı (%${progressPercent})` : 'Konu Eklenmedi'}
                       </span>
                     </div>
@@ -227,9 +227,9 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                         </div>
 
                         {/* Top 2 topics preview */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <div className="exam-topics-preview-list">
                           {topicList.slice(0, 2).map((top) => (
-                            <div key={top.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: top.completed ? 'var(--text-muted)' : 'var(--text-secondary)' }}>
+                            <div key={top.id} className="exam-topics-preview-item" style={{ color: top.completed ? 'var(--text-muted)' : 'var(--text-secondary)' }}>
                               <span style={{ color: top.completed ? 'var(--accent-emerald)' : 'var(--text-muted)' }}>
                                 {top.completed ? '✓' : '•'}
                               </span>
@@ -239,14 +239,14 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                             </div>
                           ))}
                           {totalCount > 2 && (
-                            <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: 600, marginTop: '2px' }}>
+                            <span className="exam-topics-preview-more">
                               +{totalCount - 2} konu maddesi daha...
                             </span>
                           )}
                         </div>
                       </div>
                     ) : (
-                      <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                      <div className="exam-topics-preview-empty">
                         Konuları madde madde girmek ve işaretlemek için tıklayın ➔
                       </div>
                     )}
@@ -254,8 +254,8 @@ export const ExamsView = ({ exams, setExams, courses }) => {
                 </div>
 
                 {/* Card Action Link */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div className="exam-card-footer">
+                  <span className="exam-card-action-link">
                     <span>Çıkacak Konuları Yönet</span>
                     <ArrowRight size={13} />
                   </span>

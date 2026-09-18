@@ -45,9 +45,9 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content exam-modal-content" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div className="exam-modal-header">
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
             {editingExam ? 'Sınavı Düzenle' : 'Yeni Sınav / Quiz Ekle'}
           </h2>
@@ -57,7 +57,7 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
         </div>
 
         {/* Modal Body */}
-        <form onSubmit={handleSubmit} style={{ padding: '24px' }}>
+        <form onSubmit={handleSubmit} className="exam-modal-form">
           <div className="form-group">
             <label className="form-label">Ders Adı *</label>
             <input
@@ -70,7 +70,7 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="exam-modal-grid">
             <div className="form-group">
               <label className="form-label">Sınav Türü</label>
               <select
@@ -139,7 +139,7 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
               />
             </div>
 
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+            <div className="form-group grid-span-full">
               <label className="form-label">Sınav Kapsamı / Konular</label>
               <textarea
                 rows="3"
@@ -152,7 +152,7 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
           </div>
 
           {/* Footer Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '20px' }}>
+          <div className="exam-modal-footer">
             {editingExam && (
               <button
                 type="button"
@@ -162,14 +162,13 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
                     onClose();
                   }
                 }}
-                className="btn-secondary"
-                style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                className="btn-secondary btn-delete-exam"
               >
                 <Trash2 size={16} />
                 <span>Sınavı Sil</span>
               </button>
             )}
-            <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+            <div className="exam-modal-footer-right">
               <button type="button" onClick={onClose} className="btn-secondary">
                 İptal
               </button>

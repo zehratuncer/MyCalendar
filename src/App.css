@@ -1318,9 +1318,25 @@
 }
 
 /* ==========================================================================
-   EXAM TOPICS (SINAVDA ÇIKACAK KONULAR & CHECKLIST) STYLES
+   EXAMS GRID & EXAM CARDS STYLES
    ========================================================================== */
+.exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .exam-card-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  box-sizing: border-box;
+  width: 100%;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
@@ -1330,13 +1346,274 @@
   border-color: rgba(99, 102, 241, 0.35);
 }
 
+.exam-card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.exam-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.exam-card-badge-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.exam-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.exam-edit-btn {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.exam-card-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-top: 6px;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.exam-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.exam-card-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
 .exam-topics-preview-box {
   margin-top: 14px;
   padding: 12px;
   background: var(--bg-subtle);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
+  box-sizing: border-box;
+  width: 100%;
 }
+
+.exam-topics-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.exam-topics-preview-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exam-topics-preview-status {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.exam-topics-preview-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.exam-topics-preview-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.78rem;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.exam-topics-preview-more {
+  font-size: 0.72rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.exam-topics-preview-empty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.exam-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.exam-card-action-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@media (max-width: 640px) {
+  .exams-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .exam-card-container {
+    padding: 16px;
+    gap: 14px;
+  }
+  .exam-card-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .exam-countdown-box {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+  .exam-card-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ==========================================================================
+   EXAM MODAL (SINAV EKLE / DÜZENLE) RESPONSIVE STYLES
+   ========================================================================== */
+.exam-modal-content {
+  max-width: 580px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.exam-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.exam-modal-form {
+  padding: 24px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.exam-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.exam-modal-grid .grid-span-full {
+  grid-column: span 2;
+}
+
+.exam-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.exam-modal-footer-right {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.btn-delete-exam {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-delete-exam:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+@media (max-width: 640px) {
+  .exam-modal-header {
+    padding: 16px 18px;
+  }
+  .exam-modal-form {
+    padding: 18px 16px;
+  }
+  .exam-modal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+  .exam-modal-grid .grid-span-full,
+  .exam-modal-grid .form-group {
+    grid-column: span 1 !important;
+  }
+  .exam-modal-footer {
+    flex-direction: column-reverse;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .exam-modal-footer button,
+  .exam-modal-footer-right button {
+    flex: 1;
+    justify-content: center;
+    padding: 12px;
+    font-size: 0.92rem;
+  }
+  .exam-modal-footer-right {
+    width: 100%;
+    margin-left: 0;
+    gap: 10px;
+  }
+  .btn-delete-exam {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   EXAM TOPICS (SINAVDA ÇIKACAK KONULAR & CHECKLIST) STYLES
+   ========================================================================== */
 
 .exam-topics-modal-content {
   max-width: 620px;
