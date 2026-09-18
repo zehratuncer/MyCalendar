@@ -7,20 +7,16 @@ try {
     broadcastChannel = new BroadcastChannel('mycalendar_data_sync_channel');
   }
 } catch (e) {
-  console.warn('BroadcastChannel not supported in this environment', e);
+  console.warn('BroadcastChannel not supported', e);
 }
 
-// In-memory sync state
 let syncListeners = [];
-let currentAuthUser = null;
-let realtimeSubscription = null;
+let realtimeChannel = null;
 let isSyncing = false;
 let lastSyncedAt = null;
 
 export const getSyncState = () => ({
   isCloudConfigured: isSupabaseConfigured,
-  isAuthenticated: Boolean(currentAuthUser),
-  user: currentAuthUser,
   lastSyncedAt,
   isSyncing
 });
@@ -60,24 +56,24 @@ export const broadcastLocalChange = (data) => {
 };
 
 /**
- * Push data to Supabase cloud if user is authenticated
+ * Push data to Supabase cloud table (app_sync_data)
  */
 export const syncWithCloud = async (data) => {
-  if (!isSupabaseConfigured || !supabase || !currentAuthUser) {
-    return { success: false, reason: 'unauthenticated' };
+  if (!isSupabaseConfigured || !supabase) {
+    return { success: false, reason: 'not_configured' };
   }
 
   isSyncing = true;
   try {
     const payload = {
-      user_id: currentAuthUser.id,
+      id: 'global_calendar_data',
       app_data: data,
       updated_at: new Date().toISOString()
     };
 
     const { error } = await supabase
-      .from('user_sync_data')
-      .upsert(payload, { onConflict: 'user_id' });
+      .from('app_sync_data')
+      .upsert(payload);
 
     if (error) {
       console.warn('Supabase sync upsert error:', error.message);
@@ -98,18 +94,18 @@ export const syncWithCloud = async (data) => {
  * Fetch latest data from Supabase cloud
  */
 export const fetchCloudData = async () => {
-  if (!isSupabaseConfigured || !supabase || !currentAuthUser) {
+  if (!isSupabaseConfigured || !supabase) {
     return null;
   }
 
   try {
     const { data, error } = await supabase
-      .from('user_sync_data')
+      .from('app_sync_data')
       .select('app_data, updated_at')
-      .eq('user_id', currentAuthUser.id)
+      .eq('id', 'global_calendar_data')
       .single();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.warn('Error fetching cloud data:', error.message);
       return null;
     }
@@ -125,10 +121,10 @@ export const fetchCloudData = async () => {
 };
 
 /**
- * Initialize sync listeners (BroadcastChannel, Storage events, Supabase Realtime, and Auth)
+ * Initialize real-time sync service across all devices
  */
 export const initSyncService = (onDataUpdate) => {
-  // 1. Listen to BroadcastChannel (same browser, other tabs / installed PWA)
+  // 1. BroadcastChannel (for same browser multi-tabs)
   if (broadcastChannel) {
     broadcastChannel.onmessage = (event) => {
       if (event.data?.type === 'DATA_UPDATE' && event.data?.payload) {
@@ -138,92 +134,64 @@ export const initSyncService = (onDataUpdate) => {
     };
   }
 
-  // 2. Fallback: Listen to window storage events
+  // 2. Fallback: window storage event
   const handleStorageEvent = (e) => {
     if (e.key && e.key.startsWith('mycal_')) {
-      // Storage item changed elsewhere
       try {
         if (e.newValue) {
           const parsed = JSON.parse(e.newValue);
           notifyListeners(parsed, 'storage');
         }
       } catch (err) {
-        // ignore JSON parse error
+        // ignore
       }
     }
   };
   window.addEventListener('storage', handleStorageEvent);
 
-  // 3. Supabase Auth & Realtime setup
+  // 3. Supabase Realtime & Initial Cloud Fetch
   if (isSupabaseConfigured && supabase) {
-    // Check initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        currentAuthUser = session.user;
-        subscribeToSupabaseRealtime(session.user.id, onDataUpdate);
-        fetchCloudData().then((cloudData) => {
-          if (cloudData && onDataUpdate) {
-            onDataUpdate(cloudData);
-          }
-        });
+    // Initial fetch from cloud
+    fetchCloudData().then((cloudData) => {
+      if (cloudData && typeof cloudData === 'object') {
+        if (onDataUpdate) onDataUpdate(cloudData);
       }
     });
 
-    // Listen to Auth state changes
-    supabase.auth.onAuthStateChange((event, session) => {
-      currentAuthUser = session?.user || null;
-      if (currentAuthUser) {
-        subscribeToSupabaseRealtime(currentAuthUser.id, onDataUpdate);
-        fetchCloudData().then((cloudData) => {
-          if (cloudData && onDataUpdate) {
-            onDataUpdate(cloudData);
+    // Subscribe to live Postgres changes on app_sync_data
+    if (realtimeChannel) {
+      supabase.removeChannel(realtimeChannel);
+    }
+
+    realtimeChannel = supabase
+      .channel('app_sync_channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'app_sync_data'
+        },
+        (payload) => {
+          if (payload.new && payload.new.app_data) {
+            lastSyncedAt = new Date();
+            notifyListeners(payload.new.app_data, 'cloud');
+            if (onDataUpdate) onDataUpdate(payload.new.app_data);
           }
-        });
-      } else {
-        if (realtimeSubscription) {
-          supabase.removeChannel(realtimeSubscription);
-          realtimeSubscription = null;
         }
-      }
-    });
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Realtime cloud sync active across all devices!');
+        }
+      });
   }
 
   return () => {
     window.removeEventListener('storage', handleStorageEvent);
-    if (realtimeSubscription && supabase) {
-      supabase.removeChannel(realtimeSubscription);
-      realtimeSubscription = null;
+    if (realtimeChannel && supabase) {
+      supabase.removeChannel(realtimeChannel);
+      realtimeChannel = null;
     }
   };
-};
-
-/**
- * Subscribe to Supabase Realtime for this user's row
- */
-const subscribeToSupabaseRealtime = (userId, onDataUpdate) => {
-  if (!supabase) return;
-
-  if (realtimeSubscription) {
-    supabase.removeChannel(realtimeSubscription);
-  }
-
-  realtimeSubscription = supabase
-    .channel(`public:user_sync_data:user_id=eq.${userId}`)
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'user_sync_data',
-        filter: `user_id=eq.${userId}`
-      },
-      (payload) => {
-        if (payload.new && payload.new.app_data) {
-          lastSyncedAt = new Date();
-          notifyListeners(payload.new.app_data, 'cloud');
-          if (onDataUpdate) onDataUpdate(payload.new.app_data);
-        }
-      }
-    )
-    .subscribe();
 };

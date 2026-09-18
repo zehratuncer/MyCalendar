@@ -26,12 +26,13 @@ export default function App() {
   // Initialize Real-time synchronization service
   useEffect(() => {
     const cleanup = initSyncService((incomingData) => {
-      if (incomingData) {
+      if (incomingData && typeof incomingData === 'object') {
         isIncomingSyncRef.current = true;
-        setData((prev) => ({
-          ...prev,
-          ...incomingData
-        }));
+        setData((prev) => {
+          const merged = { ...prev, ...incomingData };
+          saveAppData(merged);
+          return merged;
+        });
       }
     });
 
@@ -44,20 +45,19 @@ export default function App() {
   useEffect(() => {
     if (isIncomingSyncRef.current) {
       isIncomingSyncRef.current = false;
-      saveAppData(data);
       return;
     }
 
     saveAppData(data);
     broadcastLocalChange(data);
 
-    // Debounce cloud sync
+    // Fast debounce cloud sync (300ms)
     if (cloudSyncTimeoutRef.current) {
       clearTimeout(cloudSyncTimeoutRef.current);
     }
     cloudSyncTimeoutRef.current = setTimeout(() => {
       syncWithCloud(data);
-    }, 1000);
+    }, 300);
   }, [data]);
 
   // Check upcoming assignments and exams for browser notifications
