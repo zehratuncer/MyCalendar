@@ -14,7 +14,17 @@ import './App.css';
 
 export default function App() {
   const [data, setData] = useState(() => loadAppData());
-  const [activeTab, setActiveTab] = useState('schedule'); // 'schedule', 'assignments', 'notes', 'gpa', 'exams'
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (['schedule', 'assignments', 'notes', 'gpa', 'exams'].includes(tabParam)) {
+        return tabParam;
+      }
+    }
+    return 'schedule';
+  });
+
   const isIncomingSyncRef = useRef(false);
   const cloudSyncTimeoutRef = useRef(null);
 
@@ -22,6 +32,19 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', data.theme || 'dark');
   }, [data.theme]);
+
+  // Handle URL shortcut navigation
+  useEffect(() => {
+    const handleUrlNavigation = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam && ['schedule', 'assignments', 'notes', 'gpa', 'exams'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+    };
+    window.addEventListener('popstate', handleUrlNavigation);
+    return () => window.removeEventListener('popstate', handleUrlNavigation);
+  }, []);
 
   // Initialize Real-time synchronization service
   useEffect(() => {
@@ -106,6 +129,7 @@ export default function App() {
                 assignments: typeof newAssignments === 'function' ? newAssignments(prev.assignments) : newAssignments
               }))
             }
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
 

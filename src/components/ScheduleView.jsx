@@ -19,6 +19,7 @@ import {
 import { DAYS_TR, getCurrentDayName, getDueDateStatus, isAssignmentForCourse } from '../utils/dateUtils';
 import CourseModal from './CourseModal';
 import AssignmentModal from './AssignmentModal';
+import StudentWidget from './StudentWidget';
 
 // Time slots from 08:00 to 20:00
 const TIME_SLOTS = [
@@ -30,7 +31,8 @@ export const ScheduleView = ({
   courses = [],
   setCourses,
   assignments = [],
-  setAssignments
+  setAssignments,
+  onNavigateTab
 }) => {
   const currentDay = getCurrentDayName();
   const [selectedDay, setSelectedDay] = useState(currentDay);
@@ -205,6 +207,13 @@ export const ScheduleView = ({
           </button>
         </div>
       </div>
+
+      {/* Student Assistant Widget (Phone & Tablet Live Status & Quick Access) */}
+      <StudentWidget
+        courses={courses}
+        assignments={assignments}
+        onNavigateTab={onNavigateTab}
+      />
 
       {/* Day Selector Pills */}
       <div className="schedule-controls">
