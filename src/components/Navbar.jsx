@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Sun, Moon, Bell, BookOpen, Sparkles } from 'lucide-react';
+import { Calendar, Sun, Moon, Bell, BookOpen, StickyNote, Calculator, Award } from 'lucide-react';
 import { formatTurkishDate, getTodayScheduleStatus } from '../utils/dateUtils';
 import { requestNotificationPermission, getNotificationPermissionState } from '../utils/notificationUtils';
 
@@ -27,9 +27,9 @@ export default function Navbar({
   const navItems = [
     { id: 'schedule', label: 'Ders Programı', icon: Calendar },
     { id: 'assignments', label: 'Ödevler & Görevler', icon: BookOpen },
-    { id: 'notes', label: 'Yapılacaklar & Notlar', icon: Sparkles },
-    { id: 'gpa', label: 'Not Hesapla (GPA)', icon: Sparkles },
-    { id: 'exams', label: 'Sınav Takvimi', icon: Calendar }
+    { id: 'notes', label: 'Yapılacaklar & Notlar', icon: StickyNote },
+    { id: 'gpa', label: 'Not Hesapla (GPA)', icon: Calculator },
+    { id: 'exams', label: 'Sınav Takvimi', icon: Award }
   ];
 
   return (
