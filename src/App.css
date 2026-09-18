@@ -61,6 +61,7 @@
   letter-spacing: -0.02em;
   background: var(--primary-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -1141,11 +1142,13 @@
   min-width: 54px;
   border-radius: var(--radius-sm);
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .table-input::-webkit-outer-spin-button,
 .table-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
 }
 
