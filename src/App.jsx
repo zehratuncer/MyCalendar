@@ -6,20 +6,15 @@ import AssignmentsView from './components/AssignmentsView';
 import NotesView from './components/NotesView';
 import GpaCalculatorView from './components/GpaCalculatorView';
 import ExamsView from './components/ExamsView';
-import AuthModal from './components/AuthModal';
-import BackupModal from './components/BackupModal';
 
 import { loadAppData, saveAppData } from './utils/storage';
 import { checkUpcomingDeadlines, checkUpcomingExams } from './utils/notificationUtils';
-import { initSyncService, broadcastLocalChange, syncWithCloud, getSyncState } from './utils/syncService';
+import { initSyncService, broadcastLocalChange, syncWithCloud } from './utils/syncService';
 import './App.css';
 
 export default function App() {
   const [data, setData] = useState(() => loadAppData());
   const [activeTab, setActiveTab] = useState('schedule'); // 'schedule', 'assignments', 'notes', 'gpa', 'exams'
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isBackupModalOpen, setIsBackupModalOpen] = useState(false);
-  const [syncState, setSyncState] = useState(() => getSyncState());
   const isIncomingSyncRef = useRef(false);
   const cloudSyncTimeoutRef = useRef(null);
 
@@ -37,7 +32,6 @@ export default function App() {
           ...prev,
           ...incomingData
         }));
-        setSyncState(getSyncState());
       }
     });
 
@@ -62,9 +56,7 @@ export default function App() {
       clearTimeout(cloudSyncTimeoutRef.current);
     }
     cloudSyncTimeoutRef.current = setTimeout(() => {
-      syncWithCloud(data).then(() => {
-        setSyncState(getSyncState());
-      });
+      syncWithCloud(data);
     }, 1000);
   }, [data]);
 
@@ -94,9 +86,6 @@ export default function App() {
         theme={data.theme}
         toggleTheme={toggleTheme}
         courses={data.courses}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
-        onOpenBackup={() => setIsBackupModalOpen(true)}
-        syncState={syncState}
       />
 
       {/* Main Content Area */}
@@ -184,34 +173,6 @@ export default function App() {
 
       {/* Mobile Bottom Navigation Bar */}
       <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      {/* Cloud & Device Sync Modal */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => {
-          setIsAuthModalOpen(false);
-          setSyncState(getSyncState());
-        }}
-        user={syncState.user}
-        onAuthSuccess={(u) => {
-          setSyncState(getSyncState());
-          if (u) {
-            syncWithCloud(data);
-          }
-        }}
-      />
-
-      {/* Manual JSON Backup / Multi-Device Import Modal */}
-      <BackupModal
-        isOpen={isBackupModalOpen}
-        onClose={() => setIsBackupModalOpen(false)}
-        appData={data}
-        onDataReloaded={(importedData) => {
-          setData(importedData);
-          broadcastLocalChange(importedData);
-          syncWithCloud(importedData);
-        }}
-      />
     </div>
   );
 }
