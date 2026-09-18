@@ -11,8 +11,7 @@ import {
   Sparkles,
   BookOpen,
   CheckCircle2,
-  ListTodo,
-  Timer
+  ListTodo
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatTurkishShortDate } from '../utils/dateUtils';
@@ -106,7 +105,7 @@ export default function ExamTopicsModal({
         {/* Modal Header */}
         <div className="exam-topics-header">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
               <span
                 className="badge"
                 style={{
@@ -121,7 +120,7 @@ export default function ExamTopicsModal({
                 {formatTurkishShortDate(exam.date)} • {exam.time}
               </span>
             </div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-primary)', wordBreak: 'break-word' }}>
               {exam.courseName}
             </h2>
             <p style={{ fontSize: '0.88rem', color: 'var(--primary)', fontWeight: 600, marginTop: '2px' }}>
@@ -129,7 +128,7 @@ export default function ExamTopicsModal({
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             <button
               type="button"
               onClick={() => {
@@ -149,8 +148,8 @@ export default function ExamTopicsModal({
 
         {/* Progress Bar & Stats */}
         <div className="exam-progress-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+            <span style={{ fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
               <ListTodo size={16} color="var(--accent-emerald)" />
               <span>Konu İlerlemesi:</span>
               <span style={{ color: 'var(--accent-emerald)', fontWeight: 800 }}>
@@ -181,17 +180,16 @@ export default function ExamTopicsModal({
           )}
         </div>
 
-        {/* Add New Topic Input */}
+        {/* Add New Topic Input Form */}
         <form onSubmit={handleAddTopic} className="add-topic-form">
           <input
             type="text"
-            placeholder="Sınavda çıkacak yeni bir konu veya soru tipi ekleyin... (Enter'a basın)"
+            placeholder="Sınavda çıkacak yeni bir konu veya soru tipi ekleyin..."
             value={newTopicText}
             onChange={(e) => setNewTopicText(e.target.value)}
-            className="form-input"
-            style={{ flex: 1, padding: '10px 14px', fontSize: '0.9rem' }}
+            className="form-input add-topic-input"
           />
-          <button type="submit" className="btn-primary" style={{ padding: '10px 16px', flexShrink: 0 }}>
+          <button type="submit" className="btn-primary btn-add-topic">
             <Plus size={16} />
             <span>Madde Ekle</span>
           </button>
@@ -236,7 +234,7 @@ export default function ExamTopicsModal({
                     className="topic-delete-btn"
                     title="Bu konuyu sil"
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={15} />
                   </button>
                 </div>
               ))}
@@ -246,14 +244,13 @@ export default function ExamTopicsModal({
 
         {/* Modal Footer */}
         <div className="exam-topics-footer">
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div className="exam-topics-footer-left">
             {totalCount > 0 && (
               <>
                 <button
                   type="button"
                   onClick={() => handleMarkAll(true)}
                   className="btn-secondary"
-                  style={{ fontSize: '0.8rem', padding: '6px 12px' }}
                 >
                   <CheckCircle2 size={13} />
                   <span>Tümünü Tamamla</span>
@@ -262,7 +259,6 @@ export default function ExamTopicsModal({
                   type="button"
                   onClick={() => handleMarkAll(false)}
                   className="btn-secondary"
-                  style={{ fontSize: '0.8rem', padding: '6px 12px' }}
                 >
                   <span>Sıfırla</span>
                 </button>
@@ -270,7 +266,7 @@ export default function ExamTopicsModal({
             )}
           </div>
 
-          <button type="button" onClick={onClose} className="btn-primary" style={{ padding: '8px 18px' }}>
+          <button type="button" onClick={onClose} className="btn-primary btn-close-topics">
             Tamam
           </button>
         </div>

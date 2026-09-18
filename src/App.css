@@ -1346,6 +1346,7 @@
   flex-direction: column;
   overflow: hidden;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .exam-topics-header {
@@ -1355,6 +1356,7 @@
   padding: 22px 24px;
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg-card);
+  box-sizing: border-box;
 }
 
 .exam-progress-card {
@@ -1363,6 +1365,7 @@
   background: var(--bg-subtle);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  box-sizing: border-box;
 }
 
 .exam-progress-bar-bg {
@@ -1386,6 +1389,20 @@
   display: flex;
   gap: 10px;
   padding: 16px 24px 8px 24px;
+  box-sizing: border-box;
+}
+
+.add-topic-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.btn-add-topic {
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .exam-topics-list-container {
@@ -1394,6 +1411,7 @@
   padding: 8px 24px 16px 24px;
   min-height: 180px;
   max-height: 380px;
+  box-sizing: border-box;
 }
 
 .exam-topics-empty {
@@ -1421,6 +1439,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .exam-topic-item:hover {
@@ -1439,6 +1459,7 @@
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .exam-topic-title {
@@ -1448,6 +1469,9 @@
   color: var(--text-primary);
   line-height: 1.35;
   transition: all 0.2s ease;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .exam-topic-title.strikethrough {
@@ -1469,6 +1493,7 @@
   cursor: pointer;
   opacity: 0;
   transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
 .exam-topic-item:hover .topic-delete-btn {
@@ -1487,6 +1512,65 @@
   padding: 16px 24px;
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-card);
+  box-sizing: border-box;
+}
+
+.exam-topics-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .exam-topics-modal-content {
+    width: 95%;
+    max-height: 92vh;
+  }
+  .exam-topics-header {
+    padding: 16px 18px;
+  }
+  .exam-progress-card {
+    margin: 12px 16px 0 16px;
+    padding: 12px 14px;
+  }
+  .add-topic-form {
+    flex-direction: column;
+    padding: 12px 16px 6px 16px;
+    gap: 8px;
+  }
+  .btn-add-topic {
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+  }
+  .exam-topics-list-container {
+    padding: 6px 16px 12px 16px;
+  }
+  .exam-topic-item {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .topic-delete-btn {
+    opacity: 0.8;
+  }
+  .exam-topics-footer {
+    padding: 14px 16px;
+    flex-direction: column-reverse;
+    gap: 10px;
+    align-items: stretch;
+  }
+  .exam-topics-footer-left {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .exam-topics-footer-left button,
+  .btn-close-topics {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+  }
 }
 
 /* ==========================================================================
