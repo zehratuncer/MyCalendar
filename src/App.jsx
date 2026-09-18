@@ -6,6 +6,7 @@ import AssignmentsView from './components/AssignmentsView';
 import NotesView from './components/NotesView';
 import GpaCalculatorView from './components/GpaCalculatorView';
 import ExamsView from './components/ExamsView';
+import StudentWidget from './components/StudentWidget';
 
 import { loadAppData, saveAppData } from './utils/storage';
 import { checkUpcomingDeadlines, checkUpcomingExams } from './utils/notificationUtils';
@@ -55,6 +56,12 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="main-content">
+        {/* PWA Mobile & Tablet Live Assistant Widget */}
+        <StudentWidget
+          courses={data.courses}
+          assignments={data.assignments}
+          onNavigate={(tab) => setActiveTab(tab)}
+        />
         {activeTab === 'schedule' && (
           <ScheduleView
             courses={data.courses}
