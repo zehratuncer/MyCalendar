@@ -145,67 +145,6 @@ export const getTodayScheduleStatus = (courses = []) => {
   };
 };
 
-// Detailed Widget Schedule Information (for Phone & Tablet Widget)
-export const getWidgetScheduleInfo = (courses = []) => {
-  const currentDay = getCurrentDayName();
-  const todayCourses = courses
-    .filter((c) => c.day === currentDay)
-    .sort((a, b) => a.startTime.localeCompare(b.startTime));
-
-  const now = new Date();
-  const currentHours = String(now.getHours()).padStart(2, '0');
-  const currentMinutes = String(now.getMinutes()).padStart(2, '0');
-  const currentTime = `${currentHours}:${currentMinutes}`;
-
-  const activeCourse = todayCourses.find((c) =>
-    isTimeBetween(currentTime, c.startTime, c.endTime)
-  );
-
-  const upcomingCourses = todayCourses.filter((c) => c.startTime > currentTime);
-  const nextCourse = upcomingCourses[0] || null;
-
-  return {
-    currentDay,
-    currentTime,
-    todayCourses,
-    activeCourse,
-    nextCourse,
-    upcomingCourses,
-    totalTodayCount: todayCourses.length
-  };
-};
-
-// Detailed Widget Assignments Information (for Phone & Tablet Widget)
-export const getWidgetAssignmentsInfo = (assignments = []) => {
-  const now = new Date();
-  const todayStr = now.toISOString().split('T')[0];
-
-  const pendingAssignments = assignments.filter((a) => !a.completed);
-
-  // Today's assignments
-  const todayAssignments = pendingAssignments.filter((a) => a.dueDate === todayStr);
-
-  // Future / upcoming assignments
-  const upcomingAssignments = pendingAssignments
-    .filter((a) => a.dueDate && a.dueDate > todayStr)
-    .sort((a, b) => {
-      const dateA = new Date(`${a.dueDate}T${a.dueTime || '23:59'}`);
-      const dateB = new Date(`${b.dueDate}T${b.dueTime || '23:59'}`);
-      return dateA - dateB;
-    });
-
-  // Overdue
-  const overdueAssignments = pendingAssignments.filter((a) => a.dueDate && a.dueDate < todayStr);
-
-  return {
-    todayStr,
-    pendingTotal: pendingAssignments.length,
-    todayAssignments,
-    upcomingAssignments,
-    overdueAssignments
-  };
-};
-
 // University Letter Grade Scale (Mudanya Üniversitesi ve Standart Harf Notu Tablosu)
 export const GRADE_SCALE = {
   'A': { gpa: 4.00, label: 'A (4.00)', minScore: 90, countsInGpa: true },

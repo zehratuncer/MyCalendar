@@ -1,7 +1,6 @@
 {
   "short_name": "MyCalendar",
-  "name": "MyCalendar - Öğrenci & Ders Planlayıcı",
-  "description": "Ders programı, ödevler, sınavlar ve not takip asistanı",
+  "name": "MyCalendar - Okul & Ders Planlayıcı",
   "icons": [
     {
       "src": "/favicon.svg",
@@ -13,53 +12,5 @@
   "background_color": "#0f172a",
   "theme_color": "#6366f1",
   "display": "standalone",
-  "orientation": "portrait",
-  "shortcuts": [
-    {
-      "name": "Bugünkü Derslerim",
-      "short_name": "Dersler",
-      "description": "Bugünkü ders programını ve sıradaki dersi gör",
-      "url": "/?tab=schedule",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    },
-    {
-      "name": "Ödevlerim & Teslimler",
-      "short_name": "Ödevler",
-      "description": "Bugünkü ve yaklaşan ödevleri incele",
-      "url": "/?tab=assignments",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    },
-    {
-      "name": "Öğrenci Widget'ı",
-      "short_name": "Widget",
-      "description": "Hızlı ders ve ödev asistanı widget görünümü",
-      "url": "/?widget=true",
-      "icons": [{ "src": "/favicon.svg", "sizes": "192x192" }]
-    }
-  ],
-  "widgets": [
-    {
-      "name": "Öğrenci Asistanı Widget",
-      "short_name": "Asistan",
-      "description": "Şu an hangi dersteyim, sıradaki ders ve yaklaşan ödevler",
-      "tag": "student-assistant-widget",
-      "template": "widget",
-      "ms_ac_template": "/widget.json",
-      "data": "/widget-data.json",
-      "type": "application/json",
-      "screenshots": [
-        {
-          "src": "/favicon.svg",
-          "sizes": "512x512",
-          "label": "Öğrenci Asistanı Widget"
-        }
-      ],
-      "icons": [
-        {
-          "src": "/favicon.svg",
-          "sizes": "192x192 512x512"
-        }
-      ]
-    }
-  ]
+  "orientation": "portrait"
 }
