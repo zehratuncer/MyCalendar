@@ -180,7 +180,14 @@ export const INITIAL_EXAMS = [
     durationMinutes: 90,
     room: 'Mühendislik Amfi 1 & 2',
     topics: 'Hafta 1 - Hafta 6 arası tüm konular, Tree gezinmeleri ve kod yazımı.',
-    weight: '%30'
+    weight: '%30',
+    topicList: [
+      { id: 'top-1', title: 'Asimptotik Analiz & Big-O Notasyonu', completed: true },
+      { id: 'top-2', title: 'Stack & Queue Yapıları ve Uygulamaları', completed: true },
+      { id: 'top-3', title: 'İkili Arama Ağaçları (BST) Ekleme & Silme', completed: false },
+      { id: 'top-4', title: 'AVL Ağacı ve Rotasyon Kuralları', completed: false },
+      { id: 'top-5', title: 'Graph Gezinme (DFS & BFS Algoritmaları)', completed: false }
+    ]
   },
   {
     id: 'exam-2',
@@ -190,19 +197,31 @@ export const INITIAL_EXAMS = [
     time: '14:00',
     durationMinutes: 75,
     room: 'D-204',
-    topics: 'Matris işlemleri, Gauss eliminasyonu, Vektör uzayları.',
-    weight: '%40'
+    topics: 'Matris işlemleri, Determinant, Vektör Uzayları',
+    weight: '%40',
+    topicList: [
+      { id: 'top-21', title: 'Matris Çarpımı, Transpoz & Ters Matris', completed: true },
+      { id: 'top-22', title: 'Gauss Eliminasyonu ve Basamak Form', completed: true },
+      { id: 'top-23', title: 'Determinant Hesaplama & Cramer Yöntemi', completed: false },
+      { id: 'top-24', title: 'Özdeğer (Eigenvalue) ve Özvektör Bulma', completed: false }
+    ]
   },
   {
     id: 'exam-3',
     courseName: 'Web Programlama & Tasarım',
-    type: 'Quiz',
-    date: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    time: '11:15',
-    durationMinutes: 30,
-    room: 'Lab 201',
-    topics: 'JavaScript ES6+, DOM Manipülasyonu ve Event Handling.',
-    weight: '%15'
+    type: 'Final',
+    date: new Date(Date.now() + 35 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    time: '11:00',
+    durationMinutes: 120,
+    room: 'Bilgisayar Lab 3',
+    topics: 'HTML5, Modern CSS, React.js State Yönetimi, REST API Entegrasyonu.',
+    weight: '%50',
+    topicList: [
+      { id: 'top-31', title: 'Modern JavaScript (ES6+ Özellikleri)', completed: true },
+      { id: 'top-32', title: 'React Hooks (useState, useEffect, custom hooks)', completed: false },
+      { id: 'top-33', title: 'Asenkron İstekler & Fetch API', completed: false },
+      { id: 'top-34', title: 'Responsive CSS Grid & Flexbox Tasarımı', completed: false }
+    ]
   }
 ];
 

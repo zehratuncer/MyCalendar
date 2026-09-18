@@ -37,6 +37,7 @@ export default function ExamModal({ isOpen, onClose, onSave, onDelete, editingEx
     if (!formData.courseName.trim()) return alert('Lütfen ders adını giriniz.');
     onSave({
       ...formData,
+      topicList: formData.topicList || editingExam?.topicList || [],
       id: editingExam ? editingExam.id : `exam-${Date.now()}`
     });
     onClose();

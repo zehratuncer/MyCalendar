@@ -1691,3 +1691,172 @@
   color: var(--secondary);
   transform: translateX(3px);
 }
+
+/* ==========================================================================
+   EXAM TOPICS (SINAVDA ÇIKACAK KONULAR & CHECKLIST) STYLES
+   ========================================================================== */
+.exam-card-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.exam-card-container:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.exam-topics-preview-box {
+  margin-top: 14px;
+  padding: 12px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.exam-topics-modal-content {
+  max-width: 620px;
+  width: 95%;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.exam-topics-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+}
+
+.exam-progress-card {
+  margin: 16px 24px 0 24px;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.exam-progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.exam-progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-topic-form {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px 8px 24px;
+}
+
+.exam-topics-list-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 24px 16px 24px;
+  min-height: 180px;
+  max-height: 380px;
+}
+
+.exam-topics-empty {
+  text-align: center;
+  padding: 36px 16px;
+  background: var(--bg-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-subtle);
+}
+
+.exam-topics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exam-topic-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.exam-topic-item:hover {
+  background: var(--bg-hover);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateX(2px);
+}
+
+.exam-topic-item.completed {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.exam-topic-index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.exam-topic-title {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+  transition: all 0.2s ease;
+}
+
+.exam-topic-title.strikethrough {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.topic-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.exam-topic-item:hover .topic-delete-btn {
+  opacity: 1;
+}
+
+.topic-delete-btn:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.exam-topics-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+}
