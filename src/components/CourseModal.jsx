@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Save, Trash2, BookOpen, Plus, Clock, Flame, Zap, Leaf, Check } from 'lucide-react';
+import { X, Save, Trash2, BookOpen, Plus, Clock, Flame, Zap, Leaf } from 'lucide-react';
 import { DAYS_TR, getDueDateStatus, isAssignmentForCourse } from '../utils/dateUtils';
 
 const COLOR_OPTIONS = [
@@ -99,9 +99,9 @@ export default function CourseModal({
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
+      <div className="modal-content course-modal-content" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div className="course-modal-header">
           <h2 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
             {editingCourse ? 'Dersi Düzenle' : 'Yeni Ders Ekle'}
           </h2>
@@ -110,10 +110,10 @@ export default function CourseModal({
           </button>
         </div>
 
-        {/* Modal Body */}
-        <form onSubmit={handleSubmit} style={{ padding: '24px', maxHeight: '80vh', overflowY: 'auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+        {/* Modal Body Form */}
+        <form onSubmit={handleSubmit} className="course-modal-form">
+          <div className="course-modal-grid">
+            <div className="form-group grid-span-full">
               <label className="form-label">Ders Adı *</label>
               <input
                 type="text"
@@ -170,7 +170,7 @@ export default function CourseModal({
               />
             </div>
 
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+            <div className="form-group grid-span-full">
               <label className="form-label">Ders Günü</label>
               <select
                 value={formData.day}
@@ -204,7 +204,7 @@ export default function CourseModal({
             </div>
 
             {/* Color Picker */}
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+            <div className="form-group grid-span-full">
               <label className="form-label">Ders Renk Etiketi</label>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {COLOR_OPTIONS.map((c) => (
@@ -226,7 +226,7 @@ export default function CourseModal({
               </div>
             </div>
 
-            <div className="form-group" style={{ gridColumn: 'span 2' }}>
+            <div className="form-group grid-span-full">
               <label className="form-label">Ders Notları / Açıklama</label>
               <textarea
                 rows="2"
@@ -242,15 +242,9 @@ export default function CourseModal({
           {/* ASSIGNMENTS SECTION INSIDE COURSE MODAL (DERSE BAĞLI ÖDEVLER)             */}
           {/* ========================================================================= */}
           {editingCourse && (
-            <div
-              style={{
-                marginTop: '20px',
-                paddingTop: '20px',
-                borderTop: '1px solid var(--border-subtle)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div className="course-modal-assignments-section">
+              <div className="course-modal-assignments-header">
+                <h3 className="course-modal-assignments-title">
                   <BookOpen size={18} color="var(--primary)" />
                   <span>Bu Derse Ait Ödevler</span>
                   <span className="pill-count" style={{ background: 'var(--bg-subtle)' }}>
@@ -262,8 +256,7 @@ export default function CourseModal({
                   <button
                     type="button"
                     onClick={() => onAddAssignmentForCourse(editingCourse)}
-                    className="btn-secondary"
-                    style={{ fontSize: '0.8rem', padding: '4px 10px' }}
+                    className="btn-secondary btn-add-assign-course"
                   >
                     <Plus size={13} />
                     <span>Ödev Ekle</span>
@@ -272,44 +265,23 @@ export default function CourseModal({
               </div>
 
               {courseAssignments.length === 0 ? (
-                <div
-                  style={{
-                    padding: '16px',
-                    background: 'var(--bg-subtle)',
-                    borderRadius: 'var(--radius-md)',
-                    textAlign: 'center',
-                    fontSize: '0.85rem',
-                    color: 'var(--text-secondary)'
-                  }}
-                >
+                <div className="course-modal-assignments-empty">
                   Bu ders için kayıtlı bir ödev bulunmuyor.
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div className="course-modal-assignments-list">
                   {courseAssignments.map((assign) => {
                     const dueStatus = getDueDateStatus(assign.dueDate, assign.dueTime);
                     return (
                       <div
                         key={assign.id}
                         onClick={() => onOpenAssignmentModal && onOpenAssignmentModal(assign)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '10px 14px',
-                          background: 'var(--bg-input)',
-                          border: '1px solid var(--border-subtle)',
-                          borderRadius: 'var(--radius-md)',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease'
-                        }}
                         className="modal-assign-item"
                       >
-                        <div>
+                        <div className="modal-assign-info">
                           <div
+                            className="modal-assign-item-title"
                             style={{
-                              fontSize: '0.92rem',
-                              fontWeight: 600,
                               textDecoration: assign.completed ? 'line-through' : 'none',
                               color: assign.completed ? 'var(--text-muted)' : 'var(--text-primary)'
                             }}
@@ -317,13 +289,13 @@ export default function CourseModal({
                             {assign.title}
                           </div>
                           {assign.description && (
-                            <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                              {assign.description.substring(0, 50)}...
+                            <div className="modal-assign-desc">
+                              {assign.description.substring(0, 60)}...
                             </div>
                           )}
                         </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                        <div className="modal-assign-badges-row">
                           <span className={`badge ${dueStatus.badgeClass}`} style={{ fontSize: '0.7rem' }}>
                             <Clock size={10} />
                             <span>{dueStatus.label}</span>
@@ -339,7 +311,7 @@ export default function CourseModal({
           )}
 
           {/* Footer Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '24px' }}>
+          <div className="course-modal-footer">
             {editingCourse && (
               <button
                 type="button"
@@ -349,14 +321,13 @@ export default function CourseModal({
                     onClose();
                   }
                 }}
-                className="btn-secondary"
-                style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+                className="btn-secondary btn-delete-course"
               >
                 <Trash2 size={16} />
                 <span>Dersi Sil</span>
               </button>
             )}
-            <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+            <div className="course-modal-footer-right">
               <button type="button" onClick={onClose} className="btn-secondary">
                 İptal
               </button>
