@@ -1,5 +1,123 @@
-// Initial empty data arrays for school & student calendar (ready for real user data)
-export const INITIAL_COURSES = [];
+// Initial courses data for 2026-2027 Güz Dönemi (Kariyer Planlama hariç)
+export const INITIAL_COURSES = [
+  {
+    id: 'course-bmb375-mon',
+    name: 'Derin Öğrenme',
+    code: 'BMB 375',
+    instructor: '',
+    room: 'AMFI 6',
+    day: 'Pazartesi',
+    startTime: '11:00',
+    endTime: '12:45',
+    color: '#6366f1',
+    credits: 3,
+    notes: ''
+  },
+  {
+    id: 'course-bmb309-mon',
+    name: 'Veri Tabanı Yönetimi',
+    code: 'BMB 309',
+    instructor: '',
+    room: 'BİLİŞİM LABORATUVARI-1',
+    day: 'Pazartesi',
+    startTime: '13:00',
+    endTime: '14:45',
+    color: '#8b5cf6',
+    credits: 4,
+    notes: ''
+  },
+  {
+    id: 'course-bmb371-tue',
+    name: 'Görüntü İşleme',
+    code: 'BMB 371',
+    instructor: '',
+    room: 'AMFI 6',
+    day: 'Salı',
+    startTime: '09:00',
+    endTime: '11:45',
+    color: '#06b6d4',
+    credits: 3,
+    notes: ''
+  },
+  {
+    id: 'course-muh301-wed-1',
+    name: 'Mesleki İngilizce',
+    code: 'MUH 301',
+    instructor: '',
+    room: 'C304',
+    day: 'Çarşamba',
+    startTime: '11:00',
+    endTime: '11:45',
+    color: '#3b82f6',
+    credits: 2,
+    notes: ''
+  },
+  {
+    id: 'course-bmb309-wed',
+    name: 'Veri Tabanı Yönetimi',
+    code: 'BMB 309',
+    instructor: '',
+    room: 'C102',
+    day: 'Çarşamba',
+    startTime: '14:00',
+    endTime: '15:45',
+    color: '#8b5cf6',
+    credits: 4,
+    notes: ''
+  },
+  {
+    id: 'course-muh301-wed-2',
+    name: 'Mesleki İngilizce',
+    code: 'MUH 301',
+    instructor: '',
+    room: 'AMFİ-2',
+    day: 'Çarşamba',
+    startTime: '16:00',
+    endTime: '17:45',
+    color: '#3b82f6',
+    credits: 2,
+    notes: ''
+  },
+  {
+    id: 'course-bmb375-thu',
+    name: 'Derin Öğrenme',
+    code: 'BMB 375',
+    instructor: '',
+    room: 'AMFI 6',
+    day: 'Perşembe',
+    startTime: '13:00',
+    endTime: '14:45',
+    color: '#6366f1',
+    credits: 3,
+    notes: ''
+  },
+  {
+    id: 'course-mudu113-thu',
+    name: 'Dijital Pazarlama',
+    code: 'MUDU 113',
+    instructor: '',
+    room: 'C219',
+    day: 'Perşembe',
+    startTime: '16:00',
+    endTime: '17:45',
+    color: '#f59e0b',
+    credits: 3,
+    notes: ''
+  },
+  {
+    id: 'course-bmb303-fri',
+    name: 'Bilgisayar Mimarisi',
+    code: 'BMB 303',
+    instructor: '',
+    room: 'ONL',
+    day: 'Cuma',
+    startTime: '09:00',
+    endTime: '11:45',
+    color: '#10b981',
+    credits: 4,
+    notes: 'Online (ONL)'
+  }
+];
 
 export const INITIAL_ASSIGNMENTS = [];
 
