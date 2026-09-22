@@ -7,7 +7,7 @@ const KEYS = {
   TODOS: 'mycal_todos_v2',
   EXAMS: 'mycal_exams_v2',
   GRADES: 'mycal_grades_v1',
-  SEMESTERS: 'mycal_semesters_v1',
+  SEMESTERS: 'mycal_semesters_v2',
   THEME: 'mycal_theme_v1',
   SETTINGS: 'mycal_settings_v1',
   SCRATCHPAD: 'mycal_scratchpad_v2'

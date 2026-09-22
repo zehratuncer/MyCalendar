@@ -184,6 +184,19 @@ export const INITIAL_SEMESTERS = [
       { id: 'c-28', code: 'ISG 202', name: 'İş Sağlığı ve Güvenliği II', type: 'Z', ects: 2.0, credits: 2, letterGrade: 'B+', gpa: 3.30, midterm: 80, final: 85 },
       { id: 'c-29', code: 'MAT 222', name: 'Sayısal Analiz', type: 'Z', ects: 5.0, credits: 3, letterGrade: 'A', gpa: 4.00, midterm: 95, final: 92 }
     ]
+  },
+  {
+    id: 'sem-2026-fall',
+    name: '2026-2027 Güz',
+    status: 'Devam Ediyor',
+    courses: [
+      { id: 'c-30', code: 'MUDU 113', name: 'Dijital Pazarlama', type: 'S', ects: 3.0, credits: 2, letterGrade: '', gpa: 0.00, midterm: '', final: '' },
+      { id: 'c-31', code: 'BMB 303', name: 'Bilgisayar Mimarisi', type: 'Z', ects: 6.0, credits: 3, letterGrade: '', gpa: 0.00, midterm: '', final: '' },
+      { id: 'c-32', code: 'BMB 309', name: 'Veri Tabanı Yönetimi', type: 'Z', ects: 7.0, credits: 3, letterGrade: '', gpa: 0.00, midterm: '', final: '' },
+      { id: 'c-33', code: 'BMB 375', name: 'Derin Öğrenme', type: 'S', ects: 5.0, credits: 3, letterGrade: '', gpa: 0.00, midterm: '', final: '' },
+      { id: 'c-34', code: 'MUH 301', name: 'Mesleki İngilizce', type: 'Z', ects: 4.0, credits: 3, letterGrade: '', gpa: 0.00, midterm: '', final: '' },
+      { id: 'c-35', code: 'BMB 371', name: 'Görüntü İşleme', type: 'S', ects: 5.0, credits: 3, letterGrade: '', gpa: 0.00, midterm: '', final: '' }
+    ]
   }
 ];
 
