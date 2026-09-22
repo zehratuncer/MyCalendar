@@ -234,7 +234,7 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
             Transkript & Not Ortalaması (GPA/GANO)
           </h1>
           <p className="view-subtitle">
-            Üniversite Kredi ve AKTS (ECTS) sistemine tam uyumlu dönemlik (YANO) ve kümülatif (GANO) akademik başarı hesaplayıcısı.
+            Üniversite Kredi ve AKTS (ECTS) sistemine tam uyumlu dönemlik (YANO) ve genel (GANO) akademik başarı hesaplayıcısı.
           </p>
         </div>
 
@@ -356,7 +356,7 @@ export const GpaCalculatorView = ({ semesters = [], setSemesters, courses = [] }
                 <strong>YANO:</strong> {activeSemesterStats.yano}
               </div>
               <div style={{ color: 'var(--accent-emerald)', fontWeight: 700, fontSize: '1rem' }}>
-                <strong>Kümülatif GANO:</strong> {activeCumulativeStats?.gano}
+                <strong>GANO:</strong> {activeCumulativeStats?.gano}
               </div>
 
               <button

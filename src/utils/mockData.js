@@ -174,7 +174,7 @@ export const INITIAL_SEMESTERS = [
   {
     id: 'sem-2025-spring',
     name: '2025-2026 Bahar',
-    status: 'Yüksek Onur',
+    status: 'Onur',
     courses: [
       { id: 'c-23', code: 'BMB 200', name: 'Staj', type: 'Z', ects: 5.0, credits: 0, letterGrade: 'IP', gpa: 0.00, midterm: 0, final: 0 },
       { id: 'c-24', code: 'BMB 202', name: 'İşletim Sistemleri', type: 'Z', ects: 5.0, credits: 3, letterGrade: 'A', gpa: 4.00, midterm: 94, final: 96 },
