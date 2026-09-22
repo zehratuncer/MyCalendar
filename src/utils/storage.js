@@ -1,16 +1,16 @@
 import { INITIAL_COURSES, INITIAL_ASSIGNMENTS, INITIAL_NOTES, INITIAL_EXAMS, INITIAL_GRADES, INITIAL_TODOS, INITIAL_SEMESTERS } from './mockData';
 
 const KEYS = {
-  COURSES: 'mycal_courses_v1',
-  ASSIGNMENTS: 'mycal_assignments_v1',
-  NOTES: 'mycal_notes_v1',
-  TODOS: 'mycal_todos_v1',
-  EXAMS: 'mycal_exams_v1',
+  COURSES: 'mycal_courses_v2',
+  ASSIGNMENTS: 'mycal_assignments_v2',
+  NOTES: 'mycal_notes_v2',
+  TODOS: 'mycal_todos_v2',
+  EXAMS: 'mycal_exams_v2',
   GRADES: 'mycal_grades_v1',
   SEMESTERS: 'mycal_semesters_v1',
   THEME: 'mycal_theme_v1',
   SETTINGS: 'mycal_settings_v1',
-  SCRATCHPAD: 'mycal_scratchpad_v1'
+  SCRATCHPAD: 'mycal_scratchpad_v2'
 };
 
 export const getStoredItem = (key, fallback) => {
@@ -32,6 +32,17 @@ export const setStoredItem = (key, value) => {
 };
 
 export const loadAppData = () => {
+  // Clean up legacy v1 mock keys if they exist
+  try {
+    ['mycal_courses_v1', 'mycal_assignments_v1', 'mycal_notes_v1', 'mycal_todos_v1', 'mycal_exams_v1', 'mycal_scratchpad_v1'].forEach((k) => {
+      if (localStorage.getItem(k) !== null && localStorage.getItem(k.replace('_v1', '_v2')) === null) {
+        localStorage.removeItem(k);
+      }
+    });
+  } catch (e) {
+    // Ignore in case localStorage is restricted
+  }
+
   return {
     courses: getStoredItem(KEYS.COURSES, INITIAL_COURSES),
     assignments: getStoredItem(KEYS.ASSIGNMENTS, INITIAL_ASSIGNMENTS),
@@ -40,7 +51,7 @@ export const loadAppData = () => {
     exams: getStoredItem(KEYS.EXAMS, INITIAL_EXAMS),
     grades: getStoredItem(KEYS.GRADES, INITIAL_GRADES),
     semesters: getStoredItem(KEYS.SEMESTERS, INITIAL_SEMESTERS),
-    scratchpad: getStoredItem(KEYS.SCRATCHPAD, '📌 Burası anlık hızlı karalama defteriniz. Aklınıza gelen şeyleri hemen yazın, otomatik kaydedilir!'),
+    scratchpad: getStoredItem(KEYS.SCRATCHPAD, ''),
     theme: getStoredItem(KEYS.THEME, 'dark'),
     settings: getStoredItem(KEYS.SETTINGS, {
       notificationsEnabled: false,
