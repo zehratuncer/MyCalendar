@@ -1,7 +1,7 @@
 import { INITIAL_COURSES, INITIAL_ASSIGNMENTS, INITIAL_NOTES, INITIAL_EXAMS, INITIAL_GRADES, INITIAL_TODOS, INITIAL_SEMESTERS } from './mockData';
 
 const KEYS = {
-  COURSES: 'mycal_courses_v3',
+  COURSES: 'mycal_courses_v4',
   ASSIGNMENTS: 'mycal_assignments_v2',
   NOTES: 'mycal_notes_v2',
   TODOS: 'mycal_todos_v2',
